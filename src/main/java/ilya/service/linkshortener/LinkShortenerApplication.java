@@ -1,13 +1,13 @@
-package ilya.service.sampleapp;
+package ilya.service.linkshortener;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class SampleAppApplication {
+public class LinkShortenerApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(SampleAppApplication.class, args);
+        SpringApplication.run(LinkShortenerApplication.class, args);
     }
 
 }

@@ -1,10 +1,10 @@
-package ilya.service.sampleapp;
+package ilya.service.linkshortener;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class SampleAppApplicationTests {
+class LinkShortenerApplicationTests {
 
     @Test
     void contextLoads() {
