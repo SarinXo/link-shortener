@@ -1,3 +1,5 @@
 spring:
   application:
     name: link-shortener
+  profiles:
+    active: local
