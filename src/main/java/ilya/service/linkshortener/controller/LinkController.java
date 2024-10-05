@@ -3,6 +3,7 @@ package ilya.service.linkshortener.controller;
 import ilya.service.linkshortener.dto.CreateLinkInfoRequestDto;
 import ilya.service.linkshortener.dto.CreateLinkInfoResponseDto;
 import ilya.service.linkshortener.service.LinkService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,7 +22,7 @@ public class LinkController {
 
     @ResponseStatus(OK)
     @PostMapping("/shorten")
-    public CreateLinkInfoResponseDto createShortLink(@RequestBody CreateLinkInfoRequestDto requestDto) {
+    public CreateLinkInfoResponseDto createShortLink(@RequestBody @Valid CreateLinkInfoRequestDto requestDto) {
         log.debug("LinkController#createShortLink() was called");
         var response = linkServiceImpl.shortenLink(requestDto);
         log.debug("LinkController#createShortLink() was successfully done");
