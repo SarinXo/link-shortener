@@ -2,6 +2,7 @@ package ilya.service.linkshortener.dto;
 
 import jakarta.validation.constraints.NotEmpty;
 
-public record CreateLinkInfoResponseDto(
+public record CreateLinkInfoResponse(
         @NotEmpty String shortLink
-) { }
+) {
+}

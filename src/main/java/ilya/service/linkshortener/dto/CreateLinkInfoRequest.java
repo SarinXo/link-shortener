@@ -5,14 +5,14 @@ import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
 
-public record CreateLinkInfoRequestDto(
+public record CreateLinkInfoRequest(
         @NotNull String link,
         @NotNull LocalDateTime endTime,
         @Nullable String description,
         boolean isActive
 ) {
 
-    public CreateLinkInfoRequestDto(String link, LocalDateTime endTime, String description) {
+    public CreateLinkInfoRequest(String link, LocalDateTime endTime, String description) {
         this(link, endTime, description, true);
     }
 

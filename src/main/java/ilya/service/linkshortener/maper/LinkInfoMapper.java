@@ -1,12 +1,12 @@
 package ilya.service.linkshortener.maper;
 
-import ilya.service.linkshortener.dto.CreateLinkInfoRequestDto;
-import ilya.service.linkshortener.dto.LinkInfoDto;
+import ilya.service.linkshortener.dto.CreateLinkInfoRequest;
+import ilya.service.linkshortener.dto.LinkInfo;
 
 public class LinkInfoMapper {
 
-    public static LinkInfoDto requestToDto(CreateLinkInfoRequestDto req) {
-        return new LinkInfoDto(
+    public static LinkInfo requestToDto(CreateLinkInfoRequest req) {
+        return new LinkInfo(
                 req.link(),
                 req.endTime(),
                 req.description(),

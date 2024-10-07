@@ -1,9 +1,9 @@
 package ilya.service.linkshortener.service;
 
-import ilya.service.linkshortener.dto.CreateLinkInfoRequestDto;
-import ilya.service.linkshortener.dto.CreateLinkInfoResponseDto;
+import ilya.service.linkshortener.dto.CreateLinkInfoRequest;
+import ilya.service.linkshortener.dto.CreateLinkInfoResponse;
 
 public interface LinkService {
-    CreateLinkInfoResponseDto shortenLink(CreateLinkInfoRequestDto requestDto);
+    CreateLinkInfoResponse shortenLink(CreateLinkInfoRequest requestDto);
 
 }

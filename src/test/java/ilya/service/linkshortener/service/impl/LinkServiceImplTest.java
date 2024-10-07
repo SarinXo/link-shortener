@@ -1,74 +1,63 @@
 package ilya.service.linkshortener.service.impl;
 
-import ilya.service.linkshortener.dto.CreateLinkInfoRequestDto;
-import ilya.service.linkshortener.dto.CreateLinkInfoResponseDto;
-import ilya.service.linkshortener.dto.LinkInfoDto;
-import ilya.service.linkshortener.maper.LinkInfoMapper;
+import ilya.service.linkshortener.dto.CreateLinkInfoRequest;
+import ilya.service.linkshortener.dto.CreateLinkInfoResponse;
+import ilya.service.linkshortener.dto.LinkInfo;
 import ilya.service.linkshortener.utils.CreateLinkInfoRequestMotherObject;
-import org.apache.commons.lang3.RandomStringUtils;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.lang.reflect.Field;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mockStatic;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(MockitoExtension.class)
 class LinkServiceImplTest {
     @InjectMocks
     private LinkServiceImpl linkService;
 
-
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
-
     @Test
     @DisplayName("Корректный вызов метода LinkServiceImpl#shortenLink()")
     void whenShortenLinkCalled_thenNewLinkAddedInMap() throws IllegalAccessException, NoSuchFieldException {
         //given
         var reqDtoCreator = new CreateLinkInfoRequestMotherObject();
-        CreateLinkInfoRequestDto request = reqDtoCreator.random().build();
+        CreateLinkInfoRequest request = reqDtoCreator.random().build();
 
-        Map<String, LinkInfoDto> shortLinkStorage = getLinkMap();
+        Map<String, LinkInfo> shortLinkStorage = getLinkMap();
         int baseShortLinkLength = getBaseShortLinkLength();
-        String keyShortLink = RandomStringUtils.randomAlphanumeric(baseShortLinkLength);
 
-        LinkInfoDto info = new LinkInfoDto(
+        LinkInfo info = new LinkInfo(
                 request.link(),
                 request.endTime(),
                 request.description(),
                 request.isActive()
         );
 
-        CreateLinkInfoResponseDto expectedResponse = new CreateLinkInfoResponseDto(keyShortLink);
-
         //when
-        mockStatic(RandomStringUtils.class)
-                .when(() -> RandomStringUtils.randomAlphanumeric(baseShortLinkLength))
-                .thenReturn(keyShortLink);
-
-        mockStatic(LinkInfoMapper.class)
-                .when(() -> LinkInfoMapper.requestToDto(request))
-                .thenReturn(info);
-
-        CreateLinkInfoResponseDto actualResponse = linkService.shortenLink(request);
+        CreateLinkInfoResponse actualResponse1 = linkService.shortenLink(request);
+        CreateLinkInfoResponse actualResponse2 = linkService.shortenLink(request);
 
         //then
-        assertEquals(expectedResponse, actualResponse);
-        assertTrue(shortLinkStorage.containsKey(keyShortLink));
-        assertEquals(info, shortLinkStorage.get(keyShortLink));
+        String shortLink1 = actualResponse1.shortLink();
+        String shortLink2 = actualResponse2.shortLink();
+
+        assertEquals(shortLink1.length(), baseShortLinkLength);
+        assertEquals(shortLink2.length(), baseShortLinkLength);
+
+        assertNotEquals(actualResponse1, actualResponse2);
+        assertNotEquals(shortLink1, shortLink2);
+
+        assertTrue(shortLinkStorage.containsKey(actualResponse1.shortLink()));
+        assertTrue(shortLinkStorage.containsKey(actualResponse2.shortLink()));
+
+        assertEquals(info, shortLinkStorage.get(shortLink1));
+        assertEquals(info, shortLinkStorage.get(shortLink2));
     }
 
     private int getBaseShortLinkLength() throws IllegalAccessException, NoSuchFieldException {
@@ -77,10 +66,10 @@ class LinkServiceImplTest {
         return (int) field.get(null);
     }
 
-    private Map<String, LinkInfoDto> getLinkMap() throws IllegalAccessException, NoSuchFieldException {
+    private Map<String, LinkInfo> getLinkMap() throws IllegalAccessException, NoSuchFieldException {
         Field storageField = LinkServiceImpl.class.getDeclaredField("shortLinkStorage");
         storageField.setAccessible(true);
-        return (Map<String, LinkInfoDto>) storageField.get(null);
+        return (Map<String, LinkInfo>) storageField.get(null);
     }
 
 }
