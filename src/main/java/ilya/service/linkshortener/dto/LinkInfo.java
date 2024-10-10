@@ -2,18 +2,26 @@ package ilya.service.linkshortener.dto;
 
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.time.LocalDateTime;
 
-public record LinkInfo(
-        @NotNull String link,
-        @NotNull LocalDateTime endTime,
-        @Nullable String description,
-        boolean isActive
-) {
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class LinkInfo {
 
-    public LinkInfo(String link, LocalDateTime endTime, String description) {
-        this(link, endTime, description, true);
-    }
+    @NotNull private String link;
+    @NotNull private LocalDateTime endTime;
+    @Nullable private String description;
+    @NotNull private Boolean isActive;
 
 }

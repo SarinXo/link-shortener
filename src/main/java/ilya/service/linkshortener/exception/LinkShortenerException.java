@@ -1,6 +1,6 @@
 package ilya.service.linkshortener.exception;
 
-public class LinkShortenerException extends BusinessException {
+public class LinkShortenerException extends RuntimeException {
 
     public LinkShortenerException(String message) {
         super(message);
