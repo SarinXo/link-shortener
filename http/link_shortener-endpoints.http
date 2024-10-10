@@ -1,0 +1,9 @@
+###
+POST http://localhost:8080/shorten
+Content-Type: application/json
+
+{
+  "link": "https://google.com",
+  "endTime": "2024-10-06T12:00:00",
+  "description": "google.com"
+}

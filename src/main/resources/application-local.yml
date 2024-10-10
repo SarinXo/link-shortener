@@ -1,0 +1,4 @@
+logging:
+  level:
+    ilya:
+      service: DEBUG
