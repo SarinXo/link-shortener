@@ -1,4 +1,4 @@
-package ilya.service.linkshortener.dto;
+package ilya.service.linkshortener.model;
 
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotNull;
@@ -11,6 +11,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -19,9 +20,26 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class LinkInfo {
 
+    @NotNull private UUID id;
+    @NotNull private String shortLink;
+    @NotNull private Long openingCount;
     @NotNull private String link;
     @NotNull private LocalDateTime endTime;
     @Nullable private String description;
     @NotNull private Boolean isActive;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        LinkInfo linkInfo = (LinkInfo) o;
+
+        return id.equals(linkInfo.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
 }
