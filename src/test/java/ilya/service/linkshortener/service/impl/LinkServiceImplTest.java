@@ -12,7 +12,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.lang.reflect.Field;
 import java.util.Map;
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -34,8 +33,8 @@ class LinkServiceImplTest {
         int baseShortLinkLength = getBaseShortLinkLength();
 
         //when
-        CreateLinkInfoResponse actualResponse1 = linkService.shortenLink(request);
-        CreateLinkInfoResponse actualResponse2 = linkService.shortenLink(request);
+        CreateLinkInfoResponse actualResponse1 = linkService.createLinkInfo(request);
+        CreateLinkInfoResponse actualResponse2 = linkService.createLinkInfo(request);
 
         //then
         String shortLink1 = actualResponse1.shortLink();

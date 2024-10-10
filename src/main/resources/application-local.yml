@@ -2,3 +2,7 @@ logging:
   level:
     ilya:
       service: DEBUG
+
+app:
+  links:
+    short-link-length: ${SHORT_LINK_LENGTH:10}

@@ -29,6 +29,18 @@ public class LinkInfo {
     @Nullable private String description;
     @NotNull  private Boolean isActive;
 
+    public LinkInfo copy() {
+        return new LinkInfo(
+                this.getId(),
+                this.getShortLink(),
+                this.getOpeningCount(),
+                this.getLink(),
+                this.getEndTime(),
+                this.getDescription(),
+                this.getIsActive()
+        );
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

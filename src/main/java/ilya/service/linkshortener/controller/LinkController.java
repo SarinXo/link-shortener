@@ -20,7 +20,7 @@ public class LinkController {
     @PostMapping("/shorten")
     public CreateLinkInfoResponse createShortLink(@RequestBody @Valid CreateLinkInfoRequest requestDto) {
         log.debug("LinkController#createShortLink() was called");
-        var response = linkServiceImpl.shortenLink(requestDto);
+        var response = linkServiceImpl.createLinkInfo(requestDto);
         log.debug("LinkController#createShortLink() was successfully done");
         return response;
     }
