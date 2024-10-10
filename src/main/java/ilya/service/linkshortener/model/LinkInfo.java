@@ -1,6 +1,7 @@
 package ilya.service.linkshortener.model;
 
 import jakarta.annotation.Nullable;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,13 +21,13 @@ import java.util.UUID;
 @AllArgsConstructor
 public class LinkInfo {
 
-    @NotNull private UUID id;
-    @NotNull private String shortLink;
-    @NotNull private Long openingCount;
-    @NotNull private String link;
-    @NotNull private LocalDateTime endTime;
+    @NotNull  private UUID id;
+    @NotEmpty private String shortLink;
+    @NotNull  private Long openingCount;
+    @NotEmpty private String link;
+    @NotNull  private LocalDateTime endTime;
     @Nullable private String description;
-    @NotNull private Boolean isActive;
+    @NotNull  private Boolean isActive;
 
     @Override
     public boolean equals(Object o) {

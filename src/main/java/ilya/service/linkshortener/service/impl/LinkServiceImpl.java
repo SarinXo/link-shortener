@@ -22,11 +22,11 @@ public class LinkServiceImpl implements LinkService {
     @Override
     public CreateLinkInfoResponse shortenLink(CreateLinkInfoRequest requestDto) {
         String shortLink = RandomStringUtils.randomAlphanumeric(BASE_SHORT_LINK_LENGTH);
-        LinkInfo linkInfo = LinkInfoMapper.requestToDto(requestDto, shortLink);
+        LinkInfo linkInfo = LinkInfoMapper.requestToModel(requestDto, shortLink);
         shortLinkStorage.put(shortLink, linkInfo);
         log.debug("new '{}' short link added in map", shortLink);
 
-        return new CreateLinkInfoResponse(shortLink);
+        return LinkInfoMapper.modelToResponse(linkInfo);
     }
 
 }
