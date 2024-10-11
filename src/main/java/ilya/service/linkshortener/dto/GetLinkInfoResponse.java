@@ -8,11 +8,12 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 public record GetLinkInfoResponse(
-        @NotNull  UUID id,
+        @NotNull UUID id,
         @NotEmpty String shortLink,
-        @NotNull  Long openingCount,
+        @NotNull Long openingCount,
         @NotEmpty String link,
-        @NotNull  LocalDateTime endTime,
+        @NotNull LocalDateTime endTime,
         @Nullable String description,
-        @NotNull  Boolean isActive
-) { }
+        @NotNull Boolean isActive
+) {
+}

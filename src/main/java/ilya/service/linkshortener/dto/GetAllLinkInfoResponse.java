@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
-public record GetAllLinkInfoResponse (
-    @NotNull List<LinkInfo> links
-) { }
+public record GetAllLinkInfoResponse(
+        @NotNull List<LinkInfo> links
+) {
+}

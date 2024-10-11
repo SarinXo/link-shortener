@@ -8,8 +8,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -21,13 +19,20 @@ import java.util.UUID;
 @AllArgsConstructor
 public class LinkInfo {
 
-    @NotNull  private UUID id;
-    @NotEmpty private String shortLink;
-    @NotNull  private Long openingCount;
-    @NotEmpty private String link;
-    @NotNull  private LocalDateTime endTime;
-    @Nullable private String description;
-    @NotNull  private Boolean isActive;
+    @NotNull
+    private UUID id;
+    @NotEmpty
+    private String shortLink;
+    @NotNull
+    private Long openingCount;
+    @NotEmpty
+    private String link;
+    @NotNull
+    private LocalDateTime endTime;
+    @Nullable
+    private String description;
+    @NotNull
+    private Boolean isActive;
 
     public LinkInfo copy() {
         return new LinkInfo(

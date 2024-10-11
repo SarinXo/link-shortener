@@ -10,4 +10,5 @@ public record CreateLinkInfoRequest(
         @NotNull LocalDateTime endTime,
         @Nullable String description,
         @NotNull Boolean isActive
-) { }
+) {
+}
