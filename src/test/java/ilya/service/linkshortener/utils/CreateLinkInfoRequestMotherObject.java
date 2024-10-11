@@ -9,7 +9,7 @@ public class CreateLinkInfoRequestMotherObject {
     private String link;
     private LocalDateTime endTime;
     private String description;
-    private boolean isActive = true;
+    private Boolean isActive;
 
     public CreateLinkInfoRequestMotherObject setLink(String link) {
         this.link = link;
@@ -35,6 +35,7 @@ public class CreateLinkInfoRequestMotherObject {
         this.link = RandomStringUtils.randomAlphanumeric(15);
         this.endTime = LocalDateTime.now();
         this.description = RandomStringUtils.randomAlphanumeric(15);
+        this.isActive = true;
         return this;
     }
 
