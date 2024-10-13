@@ -27,7 +27,7 @@ public class LinkServiceImpl implements LinkService {
 
     @Override
     public CreateLinkInfoResponse createLinkInfo(CreateLinkInfoRequest requestDto) {
-        String shortLink = RandomStringUtils.randomAlphanumeric(linkInfoProperties.getShortLinkLength());
+        String shortLink = RandomStringUtils.randomAlphanumeric(linkInfoProperties.shortLinkLength());
         LinkInfo linkInfo = LinkInfoMapper.requestToModel(requestDto, shortLink);
         linkInfoRepositoryImpl.save(linkInfo);
         log.debug("new '{}' short link added in map", shortLink);
