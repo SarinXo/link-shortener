@@ -1,6 +1,6 @@
 package ilya.service.linkshortener.utils;
 
-import ilya.service.linkshortener.dto.CreateLinkInfoRequest;
+import ilya.service.linkshortener.dto.LinkInfoRequest;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import java.time.LocalDateTime;
@@ -39,8 +39,8 @@ public class LinkInfoRequestMotherObject {
         return this;
     }
 
-    public CreateLinkInfoRequest build() {
-        return new CreateLinkInfoRequest(
+    public LinkInfoRequest build() {
+        return new LinkInfoRequest(
                 this.link,
                 this.endTime,
                 this.description,

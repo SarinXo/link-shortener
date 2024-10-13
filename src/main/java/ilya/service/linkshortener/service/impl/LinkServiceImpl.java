@@ -1,7 +1,7 @@
 package ilya.service.linkshortener.service.impl;
 
 import ilya.service.linkshortener.config.properties.LinkInfoProperties;
-import ilya.service.linkshortener.dto.CreateLinkInfoRequest;
+import ilya.service.linkshortener.dto.LinkInfoRequest;
 import ilya.service.linkshortener.dto.LinkInfoResponse;
 import ilya.service.linkshortener.dto.GetAllLinkInfoResponse;
 import ilya.service.linkshortener.exception.NotFoundException;
@@ -25,7 +25,7 @@ public class LinkServiceImpl implements LinkService {
     private final LinkInfoRepository linkInfoRepositoryImpl;
 
     @Override
-    public LinkInfoResponse createLinkInfo(CreateLinkInfoRequest requestDto) {
+    public LinkInfoResponse createLinkInfo(LinkInfoRequest requestDto) {
         String shortLink = RandomStringUtils.randomAlphanumeric(linkInfoProperties.shortLinkLength());
         LinkInfo linkInfo = LinkInfoMapper.requestToModel(requestDto, shortLink);
         linkInfoRepositoryImpl.save(linkInfo);

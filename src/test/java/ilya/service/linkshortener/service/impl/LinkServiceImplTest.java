@@ -1,7 +1,7 @@
 package ilya.service.linkshortener.service.impl;
 
 import ilya.service.linkshortener.config.properties.LinkInfoProperties;
-import ilya.service.linkshortener.dto.CreateLinkInfoRequest;
+import ilya.service.linkshortener.dto.LinkInfoRequest;
 import ilya.service.linkshortener.dto.LinkInfoResponse;
 import ilya.service.linkshortener.dto.GetAllLinkInfoResponse;
 import ilya.service.linkshortener.model.LinkInfo;
@@ -44,7 +44,7 @@ class LinkServiceImplTest {
     void whenCreateLinkInfoCalled_thenReturnResponse() {
         //given
         var reqDtoCreator = new LinkInfoRequestMotherObject();
-        CreateLinkInfoRequest request = reqDtoCreator.random().build();
+        LinkInfoRequest request = reqDtoCreator.random().build();
         //todo вынести
         int baseShortLinkLength = properties.shortLinkLength();
         String shortLink = RandomStringUtils.randomAlphanumeric(baseShortLinkLength);

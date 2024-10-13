@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
 
-public record CreateLinkInfoRequest(
+public record LinkInfoRequest(
         @NotNull String link,
         @NotNull LocalDateTime endTime,
         @Nullable String description,
