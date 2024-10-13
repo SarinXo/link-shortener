@@ -38,10 +38,7 @@ public class LinkServiceImpl implements LinkService {
     public LinkInfoResponse getByShortLink(String shortLink) {
         return linkInfoRepositoryImpl.findByShortLink(shortLink)
                 .map(LinkInfoMapper::modelToResponse)
-                .orElseThrow(() -> {
-                    log.error("short link '{}' was not found in repository", shortLink);
-                    throw new NotFoundException(shortLink + " not found");
-                });
+                .orElseThrow(() -> new NotFoundException(shortLink + " not found"));
     }
 
     @Override
