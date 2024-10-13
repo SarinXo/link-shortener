@@ -46,7 +46,9 @@ public class LinkInfo {
 
     @Override
     public int hashCode() {
-        return id.hashCode();
+        return id != null
+                ? id.hashCode()
+                : 31;
     }
 
 }
