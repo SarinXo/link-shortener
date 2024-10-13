@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-public record GetLinkInfoResponse(
+public record LinkInfoResponse(
         @NotNull UUID id,
         @NotEmpty String shortLink,
         @NotNull Long openingCount,

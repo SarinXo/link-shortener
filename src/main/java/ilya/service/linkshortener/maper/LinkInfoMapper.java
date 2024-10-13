@@ -1,8 +1,7 @@
 package ilya.service.linkshortener.maper;
 
 import ilya.service.linkshortener.dto.CreateLinkInfoRequest;
-import ilya.service.linkshortener.dto.CreateLinkInfoResponse;
-import ilya.service.linkshortener.dto.GetLinkInfoResponse;
+import ilya.service.linkshortener.dto.LinkInfoResponse;
 import ilya.service.linkshortener.model.LinkInfo;
 
 public class LinkInfoMapper {
@@ -19,20 +18,8 @@ public class LinkInfoMapper {
         );
     }
 
-    public static CreateLinkInfoResponse modelToCreateResponse(LinkInfo linkInfo) {
-        return new CreateLinkInfoResponse(
-                linkInfo.getId(),
-                linkInfo.getShortLink(),
-                linkInfo.getOpeningCount(),
-                linkInfo.getLink(),
-                linkInfo.getEndTime(),
-                linkInfo.getDescription(),
-                linkInfo.getIsActive()
-        );
-    }
-
-    public static GetLinkInfoResponse modelToGetResponse(LinkInfo linkInfo) {
-        return new GetLinkInfoResponse(
+    public static LinkInfoResponse modelToResponse(LinkInfo linkInfo) {
+        return new LinkInfoResponse(
                 linkInfo.getId(),
                 linkInfo.getShortLink(),
                 linkInfo.getOpeningCount(),

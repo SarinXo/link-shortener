@@ -1,12 +1,12 @@
 package ilya.service.linkshortener.utils;
 
-import ilya.service.linkshortener.dto.GetLinkInfoResponse;
+import ilya.service.linkshortener.dto.LinkInfoResponse;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-public class GetLinkInfoResponseMotherObject {
+public class LinkInfoResponseMotherObject {
     private UUID id;
     private String shortLink;
     private Long openingCount;
@@ -15,42 +15,42 @@ public class GetLinkInfoResponseMotherObject {
     private String description;
     private Boolean isActive;
 
-    public GetLinkInfoResponseMotherObject setId(UUID id) {
+    public LinkInfoResponseMotherObject setId(UUID id) {
         this.id = id;
         return this;
     }
 
-    public GetLinkInfoResponseMotherObject setShortLink(String shortLink) {
+    public LinkInfoResponseMotherObject setShortLink(String shortLink) {
         this.shortLink = shortLink;
         return this;
     }
 
-    public GetLinkInfoResponseMotherObject setOpeningCount(Long openingCount) {
+    public LinkInfoResponseMotherObject setOpeningCount(Long openingCount) {
         this.openingCount = openingCount;
         return this;
     }
 
-    public GetLinkInfoResponseMotherObject setLink(String link) {
+    public LinkInfoResponseMotherObject setLink(String link) {
         this.link = link;
         return this;
     }
 
-    public GetLinkInfoResponseMotherObject setEndTime(LocalDateTime endTime) {
+    public LinkInfoResponseMotherObject setEndTime(LocalDateTime endTime) {
         this.endTime = endTime;
         return this;
     }
 
-    public GetLinkInfoResponseMotherObject setDescription(String description) {
+    public LinkInfoResponseMotherObject setDescription(String description) {
         this.description = description;
         return this;
     }
 
-    public GetLinkInfoResponseMotherObject setIsActive(Boolean active) {
+    public LinkInfoResponseMotherObject setIsActive(Boolean active) {
         isActive = active;
         return this;
     }
 
-    public GetLinkInfoResponseMotherObject random() {
+    public LinkInfoResponseMotherObject random() {
         this.id = UUID.randomUUID();
         this.shortLink = RandomStringUtils.randomAlphanumeric(10);
         this.openingCount = 0L;
@@ -61,8 +61,8 @@ public class GetLinkInfoResponseMotherObject {
         return this;
     }
 
-    public GetLinkInfoResponse build() {
-        return new GetLinkInfoResponse(
+    public LinkInfoResponse build() {
+        return new LinkInfoResponse(
                 this.id,
                 this.shortLink,
                 this.openingCount,

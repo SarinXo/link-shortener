@@ -2,13 +2,12 @@ package ilya.service.linkshortener.service.impl;
 
 import ilya.service.linkshortener.config.properties.LinkInfoProperties;
 import ilya.service.linkshortener.dto.CreateLinkInfoRequest;
-import ilya.service.linkshortener.dto.CreateLinkInfoResponse;
+import ilya.service.linkshortener.dto.LinkInfoResponse;
 import ilya.service.linkshortener.dto.GetAllLinkInfoResponse;
-import ilya.service.linkshortener.dto.GetLinkInfoResponse;
 import ilya.service.linkshortener.model.LinkInfo;
 import ilya.service.linkshortener.repository.LinkInfoRepository;
-import ilya.service.linkshortener.utils.CreateLinkInfoRequestMotherObject;
-import ilya.service.linkshortener.utils.GetLinkInfoResponseMotherObject;
+import ilya.service.linkshortener.utils.LinkInfoRequestMotherObject;
+import ilya.service.linkshortener.utils.LinkInfoResponseMotherObject;
 import ilya.service.linkshortener.utils.LinkInfoMotherObject;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.DisplayName;
@@ -44,10 +43,10 @@ class LinkServiceImplTest {
     @DisplayName("Корректный вызов метода LinkServiceImpl#createLinkInfo()")
     void whenCreateLinkInfoCalled_thenReturnResponse() {
         //given
-        var reqDtoCreator = new CreateLinkInfoRequestMotherObject();
+        var reqDtoCreator = new LinkInfoRequestMotherObject();
         CreateLinkInfoRequest request = reqDtoCreator.random().build();
         //todo вынести
-        int baseShortLinkLength = properties.getShortLinkLength();
+        int baseShortLinkLength = properties.shortLinkLength();
         String shortLink = RandomStringUtils.randomAlphanumeric(baseShortLinkLength);
         Long openingCount = 0L;
         LinkInfo linkInfo = new LinkInfo(
@@ -61,7 +60,7 @@ class LinkServiceImplTest {
         );
 
         //when
-        CreateLinkInfoResponse actualResponse = linkService.createLinkInfo(request);
+        LinkInfoResponse actualResponse = linkService.createLinkInfo(request);
         when(linkInfoRepositoryImpl.save(any()))
                 .thenReturn(linkInfo);
 
@@ -80,14 +79,14 @@ class LinkServiceImplTest {
     @DisplayName("Корректный вызов метода LinkServiceImpl#getByShortLink()")
     void whenExistingGetShortLinkCalled_thenReturn() {
         //given
-        int baseShortLinkLength = properties.getShortLinkLength();
+        int baseShortLinkLength = properties.shortLinkLength();
         String shortLink = RandomStringUtils.randomAlphanumeric(baseShortLinkLength);
         LinkInfo linkInfo = new LinkInfoMotherObject()
                 .random()
                 .setShortLink(shortLink)
                 .build();
 
-        GetLinkInfoResponse expectedResponse = new GetLinkInfoResponseMotherObject()
+        LinkInfoResponse expectedResponse = new LinkInfoResponseMotherObject()
                 .setId(linkInfo.getId())
                 .setShortLink(linkInfo.getShortLink())
                 .setOpeningCount(linkInfo.getOpeningCount())
@@ -100,12 +99,11 @@ class LinkServiceImplTest {
         //when
         when(linkInfoRepositoryImpl.findByShortLink(shortLink))
                 .thenReturn(Optional.of(linkInfo));
-        GetLinkInfoResponse actualResponse = linkService.getByShortLink(shortLink);
+        LinkInfoResponse actualResponse = linkService.getByShortLink(shortLink);
 
         //then
         assertEquals(expectedResponse, actualResponse);
     }
-
 
     @Test
     void whenFindByFilter_thenReturnAllEntities() {
@@ -124,4 +122,5 @@ class LinkServiceImplTest {
         //then
         assertEquals(expectedResponse.links().size(), actualResponse.links().size());
     }
+
 }

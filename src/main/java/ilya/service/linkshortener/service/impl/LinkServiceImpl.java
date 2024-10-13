@@ -2,9 +2,8 @@ package ilya.service.linkshortener.service.impl;
 
 import ilya.service.linkshortener.config.properties.LinkInfoProperties;
 import ilya.service.linkshortener.dto.CreateLinkInfoRequest;
-import ilya.service.linkshortener.dto.CreateLinkInfoResponse;
+import ilya.service.linkshortener.dto.LinkInfoResponse;
 import ilya.service.linkshortener.dto.GetAllLinkInfoResponse;
-import ilya.service.linkshortener.dto.GetLinkInfoResponse;
 import ilya.service.linkshortener.exception.NotFoundException;
 import ilya.service.linkshortener.maper.LinkInfoMapper;
 import ilya.service.linkshortener.model.LinkInfo;
@@ -26,19 +25,19 @@ public class LinkServiceImpl implements LinkService {
     private final LinkInfoRepository linkInfoRepositoryImpl;
 
     @Override
-    public CreateLinkInfoResponse createLinkInfo(CreateLinkInfoRequest requestDto) {
+    public LinkInfoResponse createLinkInfo(CreateLinkInfoRequest requestDto) {
         String shortLink = RandomStringUtils.randomAlphanumeric(linkInfoProperties.shortLinkLength());
         LinkInfo linkInfo = LinkInfoMapper.requestToModel(requestDto, shortLink);
         linkInfoRepositoryImpl.save(linkInfo);
         log.debug("new '{}' short link added in map", shortLink);
 
-        return LinkInfoMapper.modelToCreateResponse(linkInfo);
+        return LinkInfoMapper.modelToResponse(linkInfo);
     }
 
     @Override
-    public GetLinkInfoResponse getByShortLink(String shortLink) {
+    public LinkInfoResponse getByShortLink(String shortLink) {
         return linkInfoRepositoryImpl.findByShortLink(shortLink)
-                .map(LinkInfoMapper::modelToGetResponse)
+                .map(LinkInfoMapper::modelToResponse)
                 .orElseThrow(() -> {
                     log.error("short link '{}' was not found in repository", shortLink);
                     throw new NotFoundException(shortLink + " not found");
