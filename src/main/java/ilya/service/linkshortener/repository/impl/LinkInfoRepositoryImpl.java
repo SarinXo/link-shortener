@@ -19,9 +19,7 @@ public class LinkInfoRepositoryImpl implements LinkInfoRepository {
     public Optional<LinkInfo> findByShortLink(String shortLink) {
         LinkInfo linkInfo = shortLinkStorage.get(shortLink);
 
-        return linkInfo == null
-                ? Optional.empty()
-                : Optional.of(linkInfo.copy());
+        return Optional.ofNullable(linkInfo);
     }
 
     @Override
@@ -29,16 +27,16 @@ public class LinkInfoRepositoryImpl implements LinkInfoRepository {
         linkInfo.setId(UUID.randomUUID());
 
         String key = linkInfo.getShortLink();
-        LinkInfo value = linkInfo.copy();
-        shortLinkStorage.put(key, value);
+        shortLinkStorage.put(key, linkInfo);
 
         return linkInfo;
     }
 
     @Override
     public List<LinkInfo> findAll() {
-        return shortLinkStorage.values().stream()
-                .map(LinkInfo::copy).toList();
+        return shortLinkStorage.values()
+                .stream()
+                .toList();
     }
 
 }

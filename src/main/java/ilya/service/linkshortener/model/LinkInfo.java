@@ -34,18 +34,6 @@ public class LinkInfo {
     @NotNull
     private Boolean isActive;
 
-    public LinkInfo copy() {
-        return new LinkInfo(
-                this.getId(),
-                this.getShortLink(),
-                this.getOpeningCount(),
-                this.getLink(),
-                this.getEndTime(),
-                this.getDescription(),
-                this.getIsActive()
-        );
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -60,4 +48,5 @@ public class LinkInfo {
     public int hashCode() {
         return id.hashCode();
     }
+
 }
