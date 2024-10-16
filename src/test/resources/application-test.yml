@@ -1,3 +1,2 @@
-app:
-  links:
-    short-link-length: ${SHORT_LINK_LENGTH:10}
+link-shortener:
+  short-link-length: ${SHORT_LINK_LENGTH:10}

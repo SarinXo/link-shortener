@@ -6,7 +6,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;
 
 @Validated
-@ConfigurationProperties(prefix = "app.links")
+@ConfigurationProperties(prefix = "link-shortener")
 public record LinkInfoProperties(
         @NotNull(message = "short link length can't be null")
         @Min(message = "short link length can't be 8 or less", value = 8)
