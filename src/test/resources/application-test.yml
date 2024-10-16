@@ -1,7 +1,2 @@
-logging:
-  level:
-    ilya:
-      service: DEBUG
-
 link-shortener:
   short-link-length: ${SHORT_LINK_LENGTH:10}

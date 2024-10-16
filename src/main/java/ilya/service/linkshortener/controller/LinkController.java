@@ -1,7 +1,7 @@
 package ilya.service.linkshortener.controller;
 
-import ilya.service.linkshortener.dto.CreateLinkInfoRequest;
-import ilya.service.linkshortener.dto.CreateLinkInfoResponse;
+import ilya.service.linkshortener.dto.LinkInfoRequest;
+import ilya.service.linkshortener.dto.LinkInfoResponse;
 import ilya.service.linkshortener.service.LinkService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -18,9 +18,9 @@ public class LinkController {
     private final LinkService linkServiceImpl;
 
     @PostMapping("/shorten")
-    public CreateLinkInfoResponse createShortLink(@RequestBody @Valid CreateLinkInfoRequest requestDto) {
+    public LinkInfoResponse createShortLink(@RequestBody @Valid LinkInfoRequest requestDto) {
         log.debug("LinkController#createShortLink() was called");
-        var response = linkServiceImpl.shortenLink(requestDto);
+        var response = linkServiceImpl.createLinkInfo(requestDto);
         log.debug("LinkController#createShortLink() was successfully done");
         return response;
     }
