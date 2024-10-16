@@ -1,14 +1,13 @@
 package ilya.service.linkshortener.service.impl;
 
 import ilya.service.linkshortener.config.properties.LinkInfoProperties;
+import ilya.service.linkshortener.dto.GetAllLinkInfoResponse;
 import ilya.service.linkshortener.dto.LinkInfoRequest;
 import ilya.service.linkshortener.dto.LinkInfoResponse;
-import ilya.service.linkshortener.dto.GetAllLinkInfoResponse;
 import ilya.service.linkshortener.model.LinkInfo;
 import ilya.service.linkshortener.repository.LinkInfoRepository;
-import ilya.service.linkshortener.utils.LinkInfoRequestMotherObject;
-import ilya.service.linkshortener.utils.LinkInfoResponseMotherObject;
-import ilya.service.linkshortener.utils.LinkInfoMotherObject;
+import ilya.service.linkshortener.utils.LinkInfoRequestUtils;
+import ilya.service.linkshortener.utils.LinkInfoUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -43,12 +42,11 @@ class LinkServiceImplTest {
     @DisplayName("Корректный вызов метода LinkServiceImpl#createLinkInfo()")
     void whenCreateLinkInfoCalled_thenReturnResponse() {
         //given
-        var reqDtoCreator = new LinkInfoRequestMotherObject();
-        LinkInfoRequest request = reqDtoCreator.random().build();
-        //todo вынести
+        LinkInfoRequest request = LinkInfoRequestUtils.random().build();
         int baseShortLinkLength = properties.shortLinkLength();
         String shortLink = RandomStringUtils.randomAlphanumeric(baseShortLinkLength);
         Long openingCount = 0L;
+
         LinkInfo linkInfo = new LinkInfo(
                 UUID.randomUUID(),
                 shortLink,
@@ -81,19 +79,18 @@ class LinkServiceImplTest {
         //given
         int baseShortLinkLength = properties.shortLinkLength();
         String shortLink = RandomStringUtils.randomAlphanumeric(baseShortLinkLength);
-        LinkInfo linkInfo = new LinkInfoMotherObject()
-                .random()
-                .setShortLink(shortLink)
+        LinkInfo linkInfo = LinkInfoUtils.random()
+                .shortLink(shortLink)
                 .build();
 
-        LinkInfoResponse expectedResponse = new LinkInfoResponseMotherObject()
-                .setId(linkInfo.getId())
-                .setShortLink(linkInfo.getShortLink())
-                .setOpeningCount(linkInfo.getOpeningCount())
-                .setLink(linkInfo.getLink())
-                .setEndTime(linkInfo.getEndTime())
-                .setDescription(linkInfo.getDescription())
-                .setIsActive(linkInfo.getIsActive())
+        LinkInfoResponse expectedResponse = LinkInfoResponse.builder()
+                .id(linkInfo.getId())
+                .shortLink(linkInfo.getShortLink())
+                .openingCount(linkInfo.getOpeningCount())
+                .link(linkInfo.getLink())
+                .endTime(linkInfo.getEndTime())
+                .description(linkInfo.getDescription())
+                .isActive(linkInfo.getIsActive())
                 .build();
 
         //when
@@ -108,17 +105,17 @@ class LinkServiceImplTest {
     @Test
     void whenFindByFilter_thenReturnAllEntities() {
         //given
-        var linkInfoCreator = new LinkInfoMotherObject();
         List<LinkInfo> links = new ArrayList<>() {{
-            add(linkInfoCreator.random().build());
-            add(linkInfoCreator.random().build());
-            add(linkInfoCreator.random().build());
+            add(LinkInfoUtils.random().build());
+            add(LinkInfoUtils.random().build());
+            add(LinkInfoUtils.random().build());
         }};
         GetAllLinkInfoResponse expectedResponse = new GetAllLinkInfoResponse(links);
 
         //when
         when(linkInfoRepositoryImpl.findAll()).thenReturn(links);
         GetAllLinkInfoResponse actualResponse = linkService.findByFilter();
+
         //then
         assertEquals(expectedResponse.links().size(), actualResponse.links().size());
     }
