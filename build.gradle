@@ -11,10 +11,17 @@ java.sourceCompatibility = JavaVersion.VERSION_21
 java.targetCompatibility = JavaVersion.VERSION_21
 
 repositories {
+    mavenLocal()
     mavenCentral()
+    maven {
+        url = uri("https://raw.githubusercontent.com/SarinXo/logging-starter/master/maven-repo")
+    }
 }
 
+def loggingStarterVersion = '0.0.1-SNAPSHOT'
+
 dependencies {
+    implementation "ilya.project:logging-starter:${loggingStarterVersion}"
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-configuration-processor'
