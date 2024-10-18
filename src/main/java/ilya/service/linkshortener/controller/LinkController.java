@@ -43,10 +43,8 @@ public class LinkController {
     }
 
     @PutMapping
-    @ResponseStatus(NO_CONTENT)
-    public void updateLink(@RequestBody @Valid UpdateLinkInfoRequest updateLinkInfoRequest) {
-        linkServiceImpl.update(updateLinkInfoRequest);
+    public LinkInfoResponse updateLink(@RequestBody @Valid UpdateLinkInfoRequest updateLinkInfoRequest) {
+        return linkServiceImpl.update(updateLinkInfoRequest);
     }
-
 
 }
