@@ -11,3 +11,15 @@ Content-Type: application/json
 
 ###
 DELETE http://localhost:8080/links?id=92ae4fa5-89e8-44b5-84fe-91a10d2c141f
+
+###
+PUT http://localhost:8080/links
+Content-Type: application/json
+
+{
+  "id": "",
+  "link": "https://google.com",
+  "endTime": "2024-10-06T12:00:00",
+  "description": "google.com",
+  "isActive": true
+}
