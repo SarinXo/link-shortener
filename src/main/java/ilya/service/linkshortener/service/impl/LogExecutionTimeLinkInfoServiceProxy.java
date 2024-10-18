@@ -4,7 +4,7 @@ package ilya.service.linkshortener.service.impl;
 import ilya.service.linkshortener.dto.GetAllLinkInfoResponse;
 import ilya.service.linkshortener.dto.LinkInfoRequest;
 import ilya.service.linkshortener.dto.LinkInfoResponse;
-import ilya.service.linkshortener.dto.UpdateLinkInfo;
+import ilya.service.linkshortener.dto.UpdateLinkInfoRequest;
 import ilya.service.linkshortener.service.LinkService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -67,11 +67,11 @@ public class LogExecutionTimeLinkInfoServiceProxy implements LinkService {
     }
 
     @Override
-    public void update(UpdateLinkInfo updateLinkInfo) {
+    public LinkInfoResponse update(UpdateLinkInfoRequest updateLinkInfoRequest) {
         var st = new StopWatch();
         st.start();
         try {
-            linkServiceImpl.update(updateLinkInfo);
+            return linkServiceImpl.update(updateLinkInfoRequest);
         } finally {
             st.stop();
             log.info("Время выполнения метода: {} ms", st.getTotalTimeMillis());

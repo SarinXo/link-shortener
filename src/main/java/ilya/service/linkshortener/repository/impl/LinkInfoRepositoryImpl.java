@@ -1,11 +1,12 @@
 package ilya.service.linkshortener.repository.impl;
 
-import ilya.service.linkshortener.dto.UpdateLinkInfo;
+import ch.qos.logback.core.util.StringUtil;
 import ilya.service.linkshortener.model.LinkInfo;
 import ilya.service.linkshortener.repository.LinkInfoRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -58,16 +59,24 @@ public class LinkInfoRepositoryImpl implements LinkInfoRepository {
     }
 
     @Override
-    public void update(UpdateLinkInfo updateLinkInfo) {
-        Optional<LinkInfo> linkInfo = findById(updateLinkInfo.id());
+    public Optional<LinkInfo> update(LinkInfo link) {
+        Optional<LinkInfo> linkInfo = findById(link.getId());
         linkInfo.ifPresent(
                 it -> {
-                    it.setId(updateLinkInfo.id());
-                    it.setLink(updateLinkInfo.link());
-                    it.setEndTime(updateLinkInfo.endTime());
-                    it.setDescription(updateLinkInfo.description());
-                    it.setIsActive(updateLinkInfo.isActive());
+                    if(!StringUtil.isNullOrEmpty(link.getLink())) {
+                        it.setLink(link.getLink());
+                    }
+                    if(Objects.nonNull(link.getLink())) {
+                        it.setEndTime(link.getEndTime());
+                    }
+                    if(!StringUtil.isNullOrEmpty(link.getDescription())) {
+                        it.setDescription(link.getDescription());
+                    }
+                    if(Objects.nonNull(link.getIsActive())) {
+                        it.setIsActive(link.getIsActive());
+                    }
                 }
         );
+        return linkInfo;
     }
 }

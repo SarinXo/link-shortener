@@ -4,7 +4,7 @@ import ilya.service.linkshortener.config.properties.LinkInfoProperties;
 import ilya.service.linkshortener.dto.GetAllLinkInfoResponse;
 import ilya.service.linkshortener.dto.LinkInfoRequest;
 import ilya.service.linkshortener.dto.LinkInfoResponse;
-import ilya.service.linkshortener.dto.UpdateLinkInfo;
+import ilya.service.linkshortener.dto.UpdateLinkInfoRequest;
 import ilya.service.linkshortener.exception.NotFoundException;
 import ilya.service.linkshortener.maper.LinkInfoMapper;
 import ilya.service.linkshortener.model.LinkInfo;
@@ -53,7 +53,11 @@ public class LinkServiceImpl implements LinkService {
     }
 
     @Override
-    public void update(UpdateLinkInfo updateLinkInfo) {
-        linkInfoRepositoryImpl.update(updateLinkInfo);
+    public LinkInfoResponse update(UpdateLinkInfoRequest request) {
+        LinkInfo update = LinkInfoMapper.updateRequestToModel(request);
+        return linkInfoRepositoryImpl.update(update)
+                .map(LinkInfoMapper::modelToResponse)
+                .orElseThrow(() -> new NotFoundException("Not found"));
     }
+
 }

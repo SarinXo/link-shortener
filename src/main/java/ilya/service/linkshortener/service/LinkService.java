@@ -3,7 +3,7 @@ package ilya.service.linkshortener.service;
 import ilya.service.linkshortener.dto.LinkInfoRequest;
 import ilya.service.linkshortener.dto.LinkInfoResponse;
 import ilya.service.linkshortener.dto.GetAllLinkInfoResponse;
-import ilya.service.linkshortener.dto.UpdateLinkInfo;
+import ilya.service.linkshortener.dto.UpdateLinkInfoRequest;
 
 import java.util.UUID;
 
@@ -16,5 +16,5 @@ public interface LinkService {
 
     void delete(UUID id);
 
-    void update(UpdateLinkInfo updateLinkInfo);
+    LinkInfoResponse update(UpdateLinkInfoRequest request);
 }

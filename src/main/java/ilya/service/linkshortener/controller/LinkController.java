@@ -2,14 +2,12 @@ package ilya.service.linkshortener.controller;
 
 import ilya.service.linkshortener.dto.LinkInfoRequest;
 import ilya.service.linkshortener.dto.LinkInfoResponse;
-import ilya.service.linkshortener.dto.UpdateLinkInfo;
+import ilya.service.linkshortener.dto.UpdateLinkInfoRequest;
 import ilya.service.linkshortener.service.LinkService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.UUID;
 
-import static org.springframework.http.HttpStatus.ACCEPTED;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 
 @RestController
@@ -47,8 +44,8 @@ public class LinkController {
 
     @PutMapping
     @ResponseStatus(NO_CONTENT)
-    public void updateLink(@RequestBody @Valid UpdateLinkInfo updateLinkInfo) {
-        linkServiceImpl.update(updateLinkInfo);
+    public void updateLink(@RequestBody @Valid UpdateLinkInfoRequest updateLinkInfoRequest) {
+        linkServiceImpl.update(updateLinkInfoRequest);
     }
 
 

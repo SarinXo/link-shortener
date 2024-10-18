@@ -1,6 +1,6 @@
 package ilya.service.linkshortener.repository;
 
-import ilya.service.linkshortener.dto.UpdateLinkInfo;
+import ilya.service.linkshortener.dto.UpdateLinkInfoRequest;
 import ilya.service.linkshortener.model.LinkInfo;
 
 import java.util.List;
@@ -16,5 +16,5 @@ public interface LinkInfoRepository {
 
     void delete(UUID id);
 
-    void update(UpdateLinkInfo updateLinkInfo);
+    Optional<LinkInfo> update(LinkInfo link);
 }
