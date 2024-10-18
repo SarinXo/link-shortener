@@ -1,9 +1,10 @@
 package ilya.service.linkshortener.service.impl;
 
 import ilya.service.linkshortener.config.properties.LinkInfoProperties;
+import ilya.service.linkshortener.dto.GetAllLinkInfoResponse;
 import ilya.service.linkshortener.dto.LinkInfoRequest;
 import ilya.service.linkshortener.dto.LinkInfoResponse;
-import ilya.service.linkshortener.dto.GetAllLinkInfoResponse;
+import ilya.service.linkshortener.dto.UpdateLinkInfoRequest;
 import ilya.service.linkshortener.exception.NotFoundException;
 import ilya.service.linkshortener.maper.LinkInfoMapper;
 import ilya.service.linkshortener.model.LinkInfo;
@@ -12,12 +13,11 @@ import ilya.service.linkshortener.service.LinkService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Slf4j
-@Service
 @RequiredArgsConstructor
 public class LinkServiceImpl implements LinkService {
 
@@ -46,4 +46,18 @@ public class LinkServiceImpl implements LinkService {
         List<LinkInfo> links = linkInfoRepositoryImpl.findAll();
         return new GetAllLinkInfoResponse(links);
     }
+
+    @Override
+    public void delete(UUID id) {
+        linkInfoRepositoryImpl.delete(id);
+    }
+
+    @Override
+    public LinkInfoResponse update(UpdateLinkInfoRequest request) {
+        LinkInfo update = LinkInfoMapper.updateRequestToModel(request);
+        return linkInfoRepositoryImpl.update(update)
+                .map(LinkInfoMapper::modelToResponse)
+                .orElseThrow(() -> new NotFoundException("Not found"));
+    }
+
 }
