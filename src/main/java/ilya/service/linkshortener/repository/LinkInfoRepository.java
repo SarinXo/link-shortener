@@ -1,6 +1,5 @@
 package ilya.service.linkshortener.repository;
 
-import ilya.service.linkshortener.dto.UpdateLinkInfoRequest;
 import ilya.service.linkshortener.model.LinkInfo;
 
 import java.util.List;

@@ -42,8 +42,8 @@ public class LinkInfoRepositoryImpl implements LinkInfoRepository {
     }
 
     private Optional<LinkInfo> findById(UUID id) {
-        for(LinkInfo linkInfo : shortLinkStorage.values()) {
-            if(linkInfo.getId().equals(id)) {
+        for (LinkInfo linkInfo : shortLinkStorage.values()) {
+            if (linkInfo.getId().equals(id)) {
                 return Optional.of(linkInfo);
             }
         }
@@ -63,16 +63,16 @@ public class LinkInfoRepositoryImpl implements LinkInfoRepository {
         Optional<LinkInfo> linkInfo = findById(link.getId());
         linkInfo.ifPresent(
                 it -> {
-                    if(!StringUtil.isNullOrEmpty(link.getLink())) {
+                    if (!StringUtil.isNullOrEmpty(link.getLink())) {
                         it.setLink(link.getLink());
                     }
-                    if(Objects.nonNull(link.getLink())) {
+                    if (Objects.nonNull(link.getLink())) {
                         it.setEndTime(link.getEndTime());
                     }
-                    if(!StringUtil.isNullOrEmpty(link.getDescription())) {
+                    if (!StringUtil.isNullOrEmpty(link.getDescription())) {
                         it.setDescription(link.getDescription());
                     }
-                    if(Objects.nonNull(link.getIsActive())) {
+                    if (Objects.nonNull(link.getIsActive())) {
                         it.setIsActive(link.getIsActive());
                     }
                 }
