@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -44,4 +45,10 @@ public class LinkServiceImpl implements LinkService {
         List<LinkInfo> links = linkInfoRepositoryImpl.findAll();
         return new GetAllLinkInfoResponse(links);
     }
+
+    @Override
+    public void delete(UUID id) {
+        linkInfoRepositoryImpl.delete(id);
+    }
+
 }

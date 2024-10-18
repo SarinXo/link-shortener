@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StopWatch;
 
+import java.util.UUID;
+
 @Slf4j
 @RequiredArgsConstructor
 public class LogExecutionTimeLinkInfoServiceProxy implements LinkService {
@@ -45,6 +47,18 @@ public class LogExecutionTimeLinkInfoServiceProxy implements LinkService {
         st.start();
         try {
             return linkServiceImpl.findByFilter();
+        } finally {
+            st.stop();
+            log.info("Время выполнения метода: {} ms", st.getTotalTimeMillis());
+        }
+    }
+
+    @Override
+    public void delete(UUID id) {
+        var st = new StopWatch();
+        st.start();
+        try {
+            linkServiceImpl.delete(id);
         } finally {
             st.stop();
             log.info("Время выполнения метода: {} ms", st.getTotalTimeMillis());
