@@ -13,7 +13,8 @@ public interface LinkInfoRepository {
 
     List<LinkInfo> findAll();
 
+    Optional<LinkInfo> findById(UUID id);
+
     void delete(UUID id);
 
-    Optional<LinkInfo> update(LinkInfo link);
 }

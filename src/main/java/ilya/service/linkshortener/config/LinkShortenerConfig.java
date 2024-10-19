@@ -6,7 +6,6 @@ import ilya.service.linkshortener.service.LinkService;
 import ilya.service.linkshortener.service.impl.LinkServiceImpl;
 import ilya.service.linkshortener.service.impl.LogExecutionTimeLinkInfoServiceProxy;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -14,14 +13,12 @@ import org.springframework.context.annotation.Configuration;
 @RequiredArgsConstructor
 public class LinkShortenerConfig {
 
-    private final ApplicationContext context;
+    private final LinkInfoProperties properties;
+    private final LinkInfoRepository repository;
 
     @Bean
     public LinkService linkServiceImpl() {
-        var props = context.getBean(LinkInfoProperties.class);
-        var repository = context.getBean(LinkInfoRepository.class);
-
-        var linkService = new LinkServiceImpl(props, repository);
+        var linkService = new LinkServiceImpl(properties, repository);
         var proxy = new LogExecutionTimeLinkInfoServiceProxy(linkService);
 
         return proxy;
