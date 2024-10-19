@@ -3,6 +3,7 @@ package ilya.service.linkshortener.beanpostprocessor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cglib.proxy.Enhancer;
 import org.springframework.cglib.proxy.MethodInterceptor;
 import org.springframework.stereotype.Component;
@@ -15,6 +16,7 @@ import java.util.Objects;
 
 @Component
 @Slf4j
+@ConditionalOnProperty(name = "link-shortener.log-time.enabled", havingValue = "true")
 public class LogTimeBeanPostProcessor implements BeanPostProcessor {
 
     private final Map<String, BeanInfo> beansWithLogTimeAnnotation = new HashMap<>();

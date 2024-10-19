@@ -5,3 +5,5 @@ logging:
 
 link-shortener:
   short-link-length: ${SHORT_LINK_LENGTH:10}
+  log-time:
+    enabled: true
