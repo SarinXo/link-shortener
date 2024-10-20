@@ -10,6 +10,7 @@ import ilya.service.linkshortener.maper.LinkInfoMapper;
 import ilya.service.linkshortener.model.LinkInfo;
 import ilya.service.linkshortener.repository.LinkInfoRepository;
 import ilya.service.linkshortener.service.LinkService;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +22,19 @@ import java.util.List;
 @Service
 public class LinkServiceImpl implements LinkService {
     //todo исправить после деактивации LogTimeBeanPostProcessor
-    @Autowired
+
     private LinkInfoProperties linkInfoProperties;
-    @Autowired
     private LinkInfoRepository linkInfoRepositoryImpl;
+
+    @Autowired
+    public void setLinkInfoProperties(LinkInfoProperties linkInfoProperties) {
+        this.linkInfoProperties = linkInfoProperties;
+    }
+
+    @Autowired
+    public void setLinkInfoRepositoryImpl(LinkInfoRepository linkInfoRepositoryImpl) {
+        this.linkInfoRepositoryImpl = linkInfoRepositoryImpl;
+    }
 
     @LogTime(methodName = "Create Link")
     @Override
