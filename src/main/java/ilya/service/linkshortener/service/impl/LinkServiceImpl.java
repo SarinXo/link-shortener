@@ -26,7 +26,7 @@ public class LinkServiceImpl implements LinkService {
     @Autowired
     private LinkInfoRepository linkInfoRepositoryImpl;
 
-    @LogTime
+    @LogTime(methodName = "Create Link")
     @Override
     public LinkInfoResponse createLinkInfo(LinkInfoRequest requestDto) {
         String shortLink = RandomStringUtils.randomAlphanumeric(linkInfoProperties.shortLinkLength());

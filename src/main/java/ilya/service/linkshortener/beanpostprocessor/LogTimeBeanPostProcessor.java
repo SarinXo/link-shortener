@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cglib.proxy.Enhancer;
 import org.springframework.cglib.proxy.MethodInterceptor;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -62,7 +63,7 @@ public class LogTimeBeanPostProcessor implements BeanPostProcessor {
                     throw new RuntimeException(e);
                 } finally {
                     long executionTime = System.currentTimeMillis() - start;
-                    log.info("Метод {} выполнился за {} ms", method.getName(), executionTime);
+                    log.info("Метод {} выполнился за {} ms", getMethodName(method), executionTime);
                 }
             }
 
@@ -101,5 +102,14 @@ public class LogTimeBeanPostProcessor implements BeanPostProcessor {
             return true;
         }
         return false;
+    }
+
+    private String getMethodName(Method annotatedMethod) {
+        String annotationMethodName = annotatedMethod
+                .getAnnotation(LogTime.class)
+                .methodName();
+        return StringUtils.hasText(annotationMethodName)
+                ? annotationMethodName
+                : annotatedMethod.getName();
     }
 }
