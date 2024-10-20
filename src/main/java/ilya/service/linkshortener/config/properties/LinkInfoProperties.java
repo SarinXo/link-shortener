@@ -11,5 +11,6 @@ public record LinkInfoProperties(
         @NotNull(message = "short link length can't be null")
         @Min(message = "short link length can't be 8 or less", value = 8)
         Integer shortLinkLength
-) { }
+) {
+}
 

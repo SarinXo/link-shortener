@@ -39,4 +39,20 @@ public class LinkInfoRepositoryImpl implements LinkInfoRepository {
                 .toList();
     }
 
+    @Override
+    public Optional<LinkInfo> findById(UUID id) {
+        for (LinkInfo linkInfo : shortLinkStorage.values()) {
+            if (linkInfo.getId().equals(id)) {
+                return Optional.of(linkInfo);
+            }
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    public void delete(UUID id) {
+        findById(id)
+                .ifPresent(it -> shortLinkStorage.remove(it.getShortLink()));
+    }
+
 }
