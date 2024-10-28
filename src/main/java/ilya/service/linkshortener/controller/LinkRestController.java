@@ -3,6 +3,7 @@ package ilya.service.linkshortener.controller;
 import ilya.service.linkshortener.dto.LinkInfoRequest;
 import ilya.service.linkshortener.dto.LinkInfoResponse;
 import ilya.service.linkshortener.dto.UpdateLinkInfoRequest;
+import ilya.service.linkshortener.dto.wrapper.CommonResponse;
 import ilya.service.linkshortener.service.LinkService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,19 +22,19 @@ import java.util.UUID;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 
 @RestController
-@RequestMapping("/links")
+@RequestMapping("/api/v1/links")
 @Slf4j
 @RequiredArgsConstructor
-public class LinkController {
+public class LinkRestController {
 
     private final LinkService linkServiceImpl;
 
     @PostMapping("/shorten")
-    public LinkInfoResponse createShortLink(@RequestBody @Valid LinkInfoRequest requestDto) {
-        log.debug("LinkController#createShortLink() was called");
+    public CommonResponse<LinkInfoResponse> createShortLink(@RequestBody @Valid LinkInfoRequest requestDto) {
+        log.debug("LinkRestController#createShortLink() was called");
         var response = linkServiceImpl.createLinkInfo(requestDto);
-        log.debug("LinkController#createShortLink() was successfully done");
-        return response;
+        log.debug("LinkRestController#createShortLink() was successfully done");
+        return CommonResponse.of(response);
     }
 
     @DeleteMapping
@@ -43,8 +44,11 @@ public class LinkController {
     }
 
     @PutMapping
-    public LinkInfoResponse updateLink(@RequestBody @Valid UpdateLinkInfoRequest updateLinkInfoRequest) {
-        return linkServiceImpl.update(updateLinkInfoRequest);
+    public CommonResponse<LinkInfoResponse> updateLink(
+            @RequestBody @Valid UpdateLinkInfoRequest updateLinkInfoRequest
+    ) {
+        LinkInfoResponse response = linkServiceImpl.update(updateLinkInfoRequest);
+        return CommonResponse.of(response);
     }
 
 }
