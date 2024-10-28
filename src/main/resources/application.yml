@@ -2,4 +2,6 @@ spring:
   application:
     name: link-shortener
   profiles:
-    active: local
+    active:
+      - local
+      - log-exec-time

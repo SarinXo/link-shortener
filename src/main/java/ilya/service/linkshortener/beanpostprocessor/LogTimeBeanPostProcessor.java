@@ -6,6 +6,7 @@ import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cglib.proxy.Enhancer;
 import org.springframework.cglib.proxy.MethodInterceptor;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -18,6 +19,7 @@ import java.util.Objects;
 
 @Component
 @Slf4j
+@Profile("log-exec-time")
 @ConditionalOnProperty(name = "logging.log-time.enabled", havingValue = "true")
 public class LogTimeBeanPostProcessor implements BeanPostProcessor {
 
