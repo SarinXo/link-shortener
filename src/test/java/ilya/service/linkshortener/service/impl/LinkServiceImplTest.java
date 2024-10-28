@@ -6,6 +6,7 @@ import ilya.service.linkshortener.dto.LinkInfoRequest;
 import ilya.service.linkshortener.dto.LinkInfoResponse;
 import ilya.service.linkshortener.model.LinkInfo;
 import ilya.service.linkshortener.repository.LinkInfoRepository;
+import ilya.service.linkshortener.service.LinkService;
 import ilya.service.linkshortener.utils.LinkInfoRequestUtils;
 import ilya.service.linkshortener.utils.LinkInfoUtils;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -32,7 +33,7 @@ import static org.mockito.Mockito.when;
 class LinkServiceImplTest {
 
     @Autowired
-    private LinkServiceImpl linkService;
+    private LinkService linkService;
     @Autowired
     private LinkInfoProperties properties;
     @MockBean
