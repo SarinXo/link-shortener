@@ -104,4 +104,13 @@ public class LinkServiceImpl implements LinkService {
         return linkInfo;
     }
 
+    @Override
+    public String getTargetLink(String shortLink) {
+        LinkInfo linkInfo = linkInfoRepositoryImpl
+                .findByShortLink(shortLink)
+                .orElseThrow(() -> new NotFoundException(shortLink + " not found"));
+
+        return linkInfo.getLink();
+    }
+
 }

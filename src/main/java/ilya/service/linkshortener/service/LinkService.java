@@ -17,4 +17,6 @@ public interface LinkService {
     void delete(UUID id);
 
     LinkInfoResponse update(UpdateLinkInfoRequest request);
+
+    String getTargetLink(String shortLink);
 }

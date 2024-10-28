@@ -1,5 +1,5 @@
 ###
-POST http://localhost:8080/links/shorten
+POST http://localhost:8080/api/v1/links/shorten
 Content-Type: application/json
 
 {
@@ -10,10 +10,10 @@ Content-Type: application/json
 }
 
 ###
-DELETE http://localhost:8080/links?id=92ae4fa5-89e8-44b5-84fe-91a10d2c141f
+DELETE http://localhost:8080/api/v1/links?id=92ae4fa5-89e8-44b5-84fe-91a10d2c141f
 
 ###
-PUT http://localhost:8080/links
+PUT http://localhost:8080/api/v1/links
 Content-Type: application/json
 
 {
@@ -23,3 +23,6 @@ Content-Type: application/json
   "description": "google.com",
   "isActive": true
 }
+
+###
+GET http://localhost:8080/api/v1/go?ref=2nksYYDuqj
