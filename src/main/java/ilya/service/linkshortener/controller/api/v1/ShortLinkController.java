@@ -1,4 +1,4 @@
-package ilya.service.linkshortener.controller;
+package ilya.service.linkshortener.controller.api.v1;
 
 import ilya.service.linkshortener.service.LinkService;
 import lombok.RequiredArgsConstructor;

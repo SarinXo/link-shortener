@@ -6,6 +6,7 @@ import ilya.service.linkshortener.dto.GetAllLinkInfoResponse;
 import ilya.service.linkshortener.dto.LinkInfoRequest;
 import ilya.service.linkshortener.dto.LinkInfoResponse;
 import ilya.service.linkshortener.dto.UpdateLinkInfoRequest;
+import ilya.service.linkshortener.dto.wrapper.CommonRequest;
 import ilya.service.linkshortener.exception.NotFoundException;
 import ilya.service.linkshortener.maper.LinkInfoMapper;
 import ilya.service.linkshortener.model.LinkInfo;
@@ -15,6 +16,7 @@ import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,9 +46,9 @@ public class LinkServiceImpl implements LinkService {
 
     @LogTime(methodName = "Create Link")
     @Override
-    public LinkInfoResponse createLinkInfo(LinkInfoRequest requestDto) {
+    public LinkInfoResponse createLinkInfo(CommonRequest<LinkInfoRequest> requestDto) {
         String shortLink = RandomStringUtils.randomAlphanumeric(linkInfoProperties.shortLinkLength());
-        LinkInfo linkInfo = LinkInfoMapper.requestToModel(requestDto, shortLink);
+        LinkInfo linkInfo = LinkInfoMapper.requestToModel(requestDto.body(), shortLink);
         linkInfoRepositoryImpl.save(linkInfo);
         log.debug("new '{}' short link added in map", shortLink);
 
@@ -72,12 +74,13 @@ public class LinkServiceImpl implements LinkService {
     }
 
     @Override
-    public LinkInfoResponse update(UpdateLinkInfoRequest request) {
+    public LinkInfoResponse update(CommonRequest<UpdateLinkInfoRequest> request) {
+        val body = request.body();
         return linkInfoRepositoryImpl
-                .findById(request.id())
-                .map(it -> updateFromRequest(it, request))
+                .findById(body.id())
+                .map(it -> updateFromRequest(it, body))
                 .map(LinkInfoMapper::modelToResponse)
-                .orElseThrow(() -> new NotFoundException("LinkInfo with id = " + request.id() + " not found"));
+                .orElseThrow(() -> new NotFoundException("LinkInfo with id = " + body.id() + " not found"));
     }
 
     /**

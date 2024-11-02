@@ -4,6 +4,7 @@ import ilya.service.linkshortener.config.properties.LinkInfoProperties;
 import ilya.service.linkshortener.dto.GetAllLinkInfoResponse;
 import ilya.service.linkshortener.dto.LinkInfoRequest;
 import ilya.service.linkshortener.dto.LinkInfoResponse;
+import ilya.service.linkshortener.dto.wrapper.CommonRequest;
 import ilya.service.linkshortener.model.LinkInfo;
 import ilya.service.linkshortener.repository.LinkInfoRepository;
 import ilya.service.linkshortener.service.LinkService;
@@ -59,7 +60,7 @@ class LinkServiceImplTest {
         );
 
         //when
-        LinkInfoResponse actualResponse = linkService.createLinkInfo(request);
+        LinkInfoResponse actualResponse = linkService.createLinkInfo(CommonRequest.of(request));
         when(linkInfoRepositoryImpl.save(any()))
                 .thenReturn(linkInfo);
 

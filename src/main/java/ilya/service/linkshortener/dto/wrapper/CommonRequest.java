@@ -1,7 +1,9 @@
 package ilya.service.linkshortener.dto.wrapper;
 
+import jakarta.validation.Valid;
+
 public record CommonRequest <T> (
-        T body
+        @Valid T body
 ) {
 
     public static <T> CommonRequest<T> of(T body) {
