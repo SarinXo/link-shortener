@@ -1,5 +1,6 @@
 package ilya.service.linkshortener.controller.api.v1;
 
+import ilya.service.linkshortener.dto.GetAllLinkInfoResponse;
 import ilya.service.linkshortener.dto.LinkInfoRequest;
 import ilya.service.linkshortener.dto.LinkInfoResponse;
 import ilya.service.linkshortener.dto.UpdateLinkInfoRequest;
@@ -11,6 +12,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -56,8 +58,10 @@ public class LinkRestController {
         return CommonResponse.of(response);
     }
 
-    //public CommonResponse<List<LinkInfo>> getWithFilter(@RequestParam LinkFilter filter) {
-        //    LinkInfoResponse response = linkServiceImpl.getByFilter
-                //}
+    @GetMapping("/filter")
+    public CommonResponse<GetAllLinkInfoResponse> getWithFilter() {
+        GetAllLinkInfoResponse response = linkServiceImpl.findByFilter();
+        return CommonResponse.of(response);
+    }
 
 }

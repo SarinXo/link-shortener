@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -111,9 +112,17 @@ public class LinkServiceImpl implements LinkService {
     public String getTargetLink(String shortLink) {
         LinkInfo linkInfo = linkInfoRepositoryImpl
                 .findByShortLink(shortLink)
+                .filter(this::isAvailableLink)
                 .orElseThrow(() -> new NotFoundException(shortLink + " not found"));
 
         return linkInfo.getLink();
+    }
+
+    private boolean isAvailableLink(LinkInfo linkInfo) {
+        boolean isActive = Boolean.TRUE.equals(linkInfo.getIsActive());
+        boolean isNotExpired = LocalDateTime.now().isBefore(linkInfo.getEndTime());
+
+        return isActive && isNotExpired;
     }
 
 }
