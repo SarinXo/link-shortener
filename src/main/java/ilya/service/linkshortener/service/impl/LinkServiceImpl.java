@@ -65,7 +65,9 @@ public class LinkServiceImpl implements LinkService {
 
     @Override
     public GetAllLinkInfoResponse findByFilter() {
-        List<LinkInfo> links = linkInfoRepositoryImpl.findAll();
+        List<LinkInfoResponse> links = linkInfoRepositoryImpl.findAll().stream()
+                .map(LinkInfoMapper::modelToResponse)
+                .toList();
         return new GetAllLinkInfoResponse(links);
     }
 

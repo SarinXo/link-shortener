@@ -1,11 +1,12 @@
 package ilya.service.linkshortener.dto;
 
-import ilya.service.linkshortener.model.LinkInfo;
 import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
 
 import java.util.List;
 
+@Builder
 public record GetAllLinkInfoResponse(
-        @NotNull List<LinkInfo> links
+        @NotNull List<LinkInfoResponse> links
 ) {
 }
