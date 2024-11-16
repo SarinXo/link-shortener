@@ -6,7 +6,7 @@ import ilya.service.linkshortener.dto.LinkInfoResponse;
 import ilya.service.linkshortener.dto.UpdateLinkInfoRequest;
 import ilya.service.linkshortener.dto.wrapper.CommonRequest;
 import ilya.service.linkshortener.dto.wrapper.CommonResponse;
-import ilya.service.linkshortener.model.LinkInfo;
+import ilya.service.linkshortener.service.LinkAdapterService;
 import ilya.service.linkshortener.service.LinkService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
 import java.util.UUID;
 
 import static org.springframework.http.HttpStatus.NO_CONTENT;
@@ -30,38 +29,34 @@ import static org.springframework.http.HttpStatus.NO_CONTENT;
 @RequestMapping("/api/v1/links")
 @Slf4j
 @RequiredArgsConstructor
-public class LinkRestController {
+public class LinkController {
 
-    private final LinkService linkServiceImpl;
+    private final LinkAdapterService linkAdapterServiceImpl;
+    private final LinkService linkService;
 
     @PostMapping("/shorten")
     public CommonResponse<LinkInfoResponse> createShortLink(
             @RequestBody @Valid CommonRequest<LinkInfoRequest> requestDto
     ) {
-        log.debug("LinkRestController#createShortLink() was called");
-        var response = linkServiceImpl.createLinkInfo(requestDto);
-        log.debug("LinkRestController#createShortLink() was successfully done");
-        return CommonResponse.of(response);
+        return linkAdapterServiceImpl.create(requestDto);
     }
 
     @DeleteMapping
     @ResponseStatus(NO_CONTENT)
     public void deleteLink(@RequestParam UUID id) {
-        linkServiceImpl.delete(id);
+        linkService.delete(id);
     }
 
     @PutMapping
     public CommonResponse<LinkInfoResponse> updateLink(
             @RequestBody @Valid CommonRequest<UpdateLinkInfoRequest> updateLinkInfoRequest
     ) {
-        LinkInfoResponse response = linkServiceImpl.update(updateLinkInfoRequest);
-        return CommonResponse.of(response);
+        return linkAdapterServiceImpl.update(updateLinkInfoRequest);
     }
 
     @GetMapping("/filter")
     public CommonResponse<GetAllLinkInfoResponse> getWithFilter() {
-        GetAllLinkInfoResponse response = linkServiceImpl.findByFilter();
-        return CommonResponse.of(response);
+        return linkAdapterServiceImpl.getByFilter();
     }
 
 }

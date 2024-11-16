@@ -13,11 +13,11 @@ import org.springframework.web.servlet.view.RedirectView;
 @RequestMapping("/api/v1")
 public class ShortLinkController {
 
-    private final LinkService linkServiceImpl;
+    private final LinkService linkService;
 
     @GetMapping("go")
-    public RedirectView openTargetLink(@RequestParam("ref") String shortLink) {
-        String targetLink = linkServiceImpl.getTargetLink(shortLink);
+    public RedirectView redirectOnLink(@RequestParam("ref") String shortLink) {
+        String targetLink = linkService.getLinkByShortLink(shortLink);
         return new RedirectView(targetLink);
     }
 }

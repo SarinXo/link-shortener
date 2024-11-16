@@ -6,7 +6,8 @@ import ilya.service.linkshortener.dto.LinkInfoResponse;
 import ilya.service.linkshortener.dto.UpdateLinkInfoRequest;
 import ilya.service.linkshortener.dto.wrapper.CommonRequest;
 import ilya.service.linkshortener.dto.wrapper.CommonResponse;
-import ilya.service.linkshortener.service.impl.LinkServiceImpl;
+import ilya.service.linkshortener.service.LinkAdapterService;
+import ilya.service.linkshortener.service.LinkService;
 import ilya.service.linkshortener.utils.GetAllLinkInfoResponseUtils;
 import ilya.service.linkshortener.utils.LinkInfoRequestUtils;
 import ilya.service.linkshortener.utils.LinkInfoResponseUtils;
@@ -33,17 +34,20 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-@WebMvcTest(LinkRestController.class)
-class LinkRestControllerTest {
+@WebMvcTest(LinkController.class)
+class LinkControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
-    private LinkServiceImpl linkServiceImpl;
+    private LinkAdapterService linkAdapterService;
+
+    @MockBean
+    private LinkService linkService;
 
     @Test
-    @DisplayName("Корректный вызов метода LinkRestController#createShortLink()")
+    @DisplayName("Корректный вызов метода LinkController#createShortLink()")
     void whenCreateShortLink_thenReturnNewLinkInDto() throws Exception {
         //given
         LinkInfoRequest linkInfoRequest = LinkInfoRequestUtils.random().build();
@@ -52,7 +56,7 @@ class LinkRestControllerTest {
         CommonResponse<LinkInfoResponse> response = CommonResponse.of(linkInfoResponse);
 
         //when
-        when(linkServiceImpl.createLinkInfo(any())).thenReturn(linkInfoResponse);
+        when(linkAdapterService.create(any())).thenReturn(response);
         mockMvc.perform(post("/api/v1/links/shorten")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(toJson(request)))
@@ -69,7 +73,7 @@ class LinkRestControllerTest {
     }
 
     @Test
-    @DisplayName("Корректный вызов метода LinkRestController#updateLink()")
+    @DisplayName("Корректный вызов метода LinkController#updateLink()")
     void whenUpdateLink_thenReturnUpdatedLink() throws Exception {
         //given
         UpdateLinkInfoRequest updateRequest = UpdateLinkInfoRequestUtils.random().build();
@@ -78,7 +82,7 @@ class LinkRestControllerTest {
         CommonResponse<LinkInfoResponse> response = CommonResponse.of(linkInfoResponse);
 
         //when
-        when(linkServiceImpl.update(request)).thenReturn(linkInfoResponse);
+        when(linkAdapterService.update(request)).thenReturn(response);
 
         mockMvc.perform(put("/api/v1/links")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -96,11 +100,12 @@ class LinkRestControllerTest {
     }
 
     @Test
-    @DisplayName("Корректный вызов метода LinkRestController#getWithFilter()")
+    @DisplayName("Корректный вызов метода LinkController#getWithFilter()")
     void whenGetWithFilter_thenReturn3Links() throws Exception {
         GetAllLinkInfoResponse getAllLinkInfoResponse = GetAllLinkInfoResponseUtils.random(3).build();
+        CommonResponse<GetAllLinkInfoResponse> response = CommonResponse.of(getAllLinkInfoResponse);
 
-        when(linkServiceImpl.findByFilter()).thenReturn(getAllLinkInfoResponse);
+        when(linkAdapterService.getByFilter()).thenReturn(response);
 
         mockMvc.perform(get("/api/v1/links/filter"))
                 .andExpect(status().isOk())

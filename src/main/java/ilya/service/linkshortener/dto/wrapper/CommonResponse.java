@@ -1,6 +1,6 @@
 package ilya.service.linkshortener.dto.wrapper;
 
-public record CommonResponse <T> (
+public record CommonResponse<T>(
         T body
 ) {
 
