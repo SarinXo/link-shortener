@@ -4,7 +4,7 @@ import ilya.service.linkshortener.config.properties.LinkInfoProperties;
 import ilya.service.linkshortener.dto.service.LinkInfoCreateDto;
 import ilya.service.linkshortener.dto.service.LinkInfoUpdateDto;
 import ilya.service.linkshortener.exception.NotFoundException;
-import ilya.service.linkshortener.maper.LinkInfoMapper;
+import ilya.service.linkshortener.maper.LinkInfoMapstuctMapper;
 import ilya.service.linkshortener.model.LinkInfo;
 import ilya.service.linkshortener.repository.LinkInfoRepository;
 import ilya.service.linkshortener.service.LinkService;
@@ -24,8 +24,13 @@ import java.util.UUID;
 public class LinkServiceImpl implements LinkService {
 
     private LinkInfoProperties linkInfoProperties;
-
+    private LinkInfoMapstuctMapper mapper;
     private LinkInfoRepository linkInfoRepository;
+
+    @Autowired
+    public void setMapper(LinkInfoMapstuctMapper linkInfoMapstuctMapper) {
+        this.mapper = linkInfoMapstuctMapper;
+    }
 
     @Autowired
     public void setLinkInfoProperties(LinkInfoProperties linkInfoProperties) {
@@ -39,7 +44,7 @@ public class LinkServiceImpl implements LinkService {
 
     @Override
     public LinkInfo create(LinkInfoCreateDto dto) {
-        LinkInfo linkInfo = LinkInfoMapper.createDtoToModel(dto);
+        LinkInfo linkInfo = mapper.createDtoToModel(dto);
 
         String shortLink = RandomStringUtils.randomAlphanumeric(linkInfoProperties.shortLinkLength());
         linkInfo.setShortLink(shortLink);

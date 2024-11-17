@@ -57,7 +57,7 @@ class LinkControllerTest {
 
         //when
         when(linkAdapterService.create(any())).thenReturn(response);
-        mockMvc.perform(post("/api/v1/links/shorten")
+        mockMvc.perform(post("/api/v1/link-infos")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(toJson(request)))
                 //then
@@ -84,7 +84,7 @@ class LinkControllerTest {
         //when
         when(linkAdapterService.update(request)).thenReturn(response);
 
-        mockMvc.perform(put("/api/v1/links")
+        mockMvc.perform(put("/api/v1/link-infos")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(toJson(request)))
                 //then
@@ -107,7 +107,7 @@ class LinkControllerTest {
 
         when(linkAdapterService.getByFilter()).thenReturn(response);
 
-        mockMvc.perform(get("/api/v1/links/filter"))
+        mockMvc.perform(get("/api/v1/link-infos/filter"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.body.links").exists())

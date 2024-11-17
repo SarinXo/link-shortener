@@ -28,7 +28,7 @@ public class ShortLinkControllerTest {
 
         //when
         when(linkService.getLinkByShortLink(any())).thenReturn("https://google.com");
-        mockMvc.perform(get("/api/v1/go?ref=link"))
+        mockMvc.perform(get("/api/v1/short-link/SHORT_LINK"))
                 //then
                 .andExpect(status().is3xxRedirection());
     }

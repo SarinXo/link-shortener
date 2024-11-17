@@ -9,17 +9,6 @@ import ilya.service.linkshortener.model.LinkInfo;
 
 public class LinkInfoMapper {
 
-    public static LinkInfo requestToModel(LinkInfoRequest req, String shortLink) {
-        return new LinkInfo(
-                null,
-                shortLink,
-                0L,
-                req.link(),
-                req.endTime(),
-                req.description(),
-                req.isActive()
-        );
-    }
 
     public static LinkInfoResponse modelToResponse(LinkInfo linkInfo) {
         return new LinkInfoResponse(
@@ -31,16 +20,6 @@ public class LinkInfoMapper {
                 linkInfo.getDescription(),
                 linkInfo.getIsActive()
         );
-    }
-
-    public static LinkInfo updateRequestToModel(UpdateLinkInfoRequest req) {
-        return LinkInfo.builder()
-                .id(req.id())
-                .link(req.link())
-                .endTime(req.endTime())
-                .description(req.description())
-                .isActive(req.isActive())
-                .build();
     }
 
     public static LinkInfo createDtoToModel(LinkInfoCreateDto dto) {
