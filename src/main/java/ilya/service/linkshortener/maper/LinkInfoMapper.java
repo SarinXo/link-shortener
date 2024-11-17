@@ -1,8 +1,8 @@
 package ilya.service.linkshortener.maper;
 
-import ilya.service.linkshortener.dto.LinkInfoRequest;
-import ilya.service.linkshortener.dto.LinkInfoResponse;
-import ilya.service.linkshortener.dto.UpdateLinkInfoRequest;
+import ilya.service.linkshortener.dto.controller.request.LinkInfoRequest;
+import ilya.service.linkshortener.dto.controller.request.UpdateLinkInfoRequest;
+import ilya.service.linkshortener.dto.controller.response.LinkInfoResponse;
 import ilya.service.linkshortener.dto.service.LinkInfoCreateDto;
 import ilya.service.linkshortener.dto.service.LinkInfoUpdateDto;
 import ilya.service.linkshortener.model.LinkInfo;

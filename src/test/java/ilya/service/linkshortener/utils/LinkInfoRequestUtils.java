@@ -1,6 +1,6 @@
 package ilya.service.linkshortener.utils;
 
-import ilya.service.linkshortener.dto.LinkInfoRequest;
+import ilya.service.linkshortener.dto.controller.request.LinkInfoRequest;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import java.time.LocalDateTime;

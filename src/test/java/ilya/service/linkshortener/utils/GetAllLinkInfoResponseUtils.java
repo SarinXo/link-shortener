@@ -1,6 +1,6 @@
 package ilya.service.linkshortener.utils;
 
-import ilya.service.linkshortener.dto.GetAllLinkInfoResponse;
+import ilya.service.linkshortener.dto.controller.response.GetAllLinkInfoResponse;
 
 import java.util.stream.Stream;
 

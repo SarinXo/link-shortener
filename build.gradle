@@ -26,6 +26,8 @@ dependencies {
     testImplementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
 }
 
+jar.enabled(false)
+
 tasks.named('test') {
     useJUnitPlatform()
 }
