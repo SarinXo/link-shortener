@@ -23,7 +23,10 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
 }
+
+jar.enabled(false)
 
 tasks.named('test') {
     useJUnitPlatform()

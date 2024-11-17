@@ -1,4 +1,4 @@
-package ilya.service.linkshortener.dto;
+package ilya.service.linkshortener.dto.controller.response;
 
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotEmpty;

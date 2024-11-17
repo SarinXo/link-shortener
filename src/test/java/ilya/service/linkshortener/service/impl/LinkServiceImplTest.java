@@ -1,13 +1,13 @@
 package ilya.service.linkshortener.service.impl;
 
 import ilya.service.linkshortener.config.properties.LinkInfoProperties;
-import ilya.service.linkshortener.dto.GetAllLinkInfoResponse;
-import ilya.service.linkshortener.dto.LinkInfoRequest;
-import ilya.service.linkshortener.dto.LinkInfoResponse;
+import ilya.service.linkshortener.dto.service.LinkInfoCreateDto;
+import ilya.service.linkshortener.dto.service.LinkInfoUpdateDto;
 import ilya.service.linkshortener.model.LinkInfo;
 import ilya.service.linkshortener.repository.LinkInfoRepository;
 import ilya.service.linkshortener.service.LinkService;
-import ilya.service.linkshortener.utils.LinkInfoRequestUtils;
+import ilya.service.linkshortener.utils.LinkInfoCreateDtoUtils;
+import ilya.service.linkshortener.utils.LinkInfoUpdateDtoUtils;
 import ilya.service.linkshortener.utils.LinkInfoUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.DisplayName;
@@ -18,7 +18,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.TestPropertySource;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -40,10 +39,10 @@ class LinkServiceImplTest {
     private LinkInfoRepository linkInfoRepositoryImpl;
 
     @Test
-    @DisplayName("Корректный вызов метода LinkServiceImpl#createLinkInfo()")
-    void whenCreateLinkInfoCalled_thenReturnResponse() {
+    @DisplayName("Корректный вызов метода LinkServiceImpl#create()")
+    void whenCreate_thenReturnCorrectEntity() {
         //given
-        LinkInfoRequest request = LinkInfoRequestUtils.random().build();
+        LinkInfoCreateDto dto = LinkInfoCreateDtoUtils.random().build();
         int baseShortLinkLength = properties.shortLinkLength();
         String shortLink = RandomStringUtils.randomAlphanumeric(baseShortLinkLength);
         Long openingCount = 0L;
@@ -52,73 +51,116 @@ class LinkServiceImplTest {
                 UUID.randomUUID(),
                 shortLink,
                 openingCount,
-                request.link(),
-                request.endTime(),
-                request.description(),
-                request.isActive()
+                dto.link(),
+                dto.endTime(),
+                dto.description(),
+                dto.isActive()
         );
 
         //when
-        LinkInfoResponse actualResponse = linkService.createLinkInfo(request);
         when(linkInfoRepositoryImpl.save(any()))
                 .thenReturn(linkInfo);
+        LinkInfo entity = linkService.create(dto);
 
         //then
-        String shortLink1 = actualResponse.shortLink();
-        assertEquals(baseShortLinkLength, shortLink1.length());
+        int shortLinkLength = entity.getShortLink().length();
+        assertEquals(baseShortLinkLength, shortLinkLength);
 
         assertEquals(linkInfo.getShortLink(), shortLink);
-        assertEquals(linkInfo.getLink(), request.link());
-        assertEquals(linkInfo.getEndTime(), request.endTime());
-        assertEquals(linkInfo.getDescription(), request.description());
-        assertEquals(linkInfo.getIsActive(), request.isActive());
+        assertEquals(linkInfo.getLink(), dto.link());
+        assertEquals(linkInfo.getEndTime(), dto.endTime());
+        assertEquals(linkInfo.getDescription(), dto.description());
+        assertEquals(linkInfo.getIsActive(), dto.isActive());
+    }
+
+    @Test
+    @DisplayName("Корректный вызов метода LinkServiceImpl#update()")
+    void whenUpdate_thenReturnCorrectEntity() {
+        //given
+        LinkInfoUpdateDto dto = LinkInfoUpdateDtoUtils.random().build();
+        LinkInfo entity = LinkInfoUtils.random().build();
+
+        //when
+        when(linkInfoRepositoryImpl.findById(dto.id()))
+                .thenReturn(Optional.of(entity));
+        when(linkInfoRepositoryImpl.save(entity))
+                .thenReturn(entity);
+        LinkInfo result = linkService.update(dto);
+
+        //then
+        assertEquals(dto.link(), result.getLink());
+        assertEquals(dto.endTime(), result.getEndTime());
+        assertEquals(dto.description(), result.getDescription());
+        assertEquals(dto.isActive(), result.getIsActive());
+    }
+
+    @Test
+    @DisplayName("Корректный вызов метода LinkServiceImpl#getById()")
+    void whenGetById_thenReturnCorrectEntity() {
+        //given
+        UUID id = UUID.randomUUID();
+        LinkInfo entity = LinkInfoUtils.random().id(id).build();
+
+        //when
+        when(linkInfoRepositoryImpl.findById(id))
+                .thenReturn(Optional.of(entity));
+        LinkInfo result = linkService.getById(id);
+
+        //then
+        assertEquals(entity, result);
     }
 
     @Test
     @DisplayName("Корректный вызов метода LinkServiceImpl#getByShortLink()")
-    void whenExistingGetShortLinkCalled_thenReturn() {
+    void whenGetByShortLink_thenReturnCorrectEntity() {
         //given
         int baseShortLinkLength = properties.shortLinkLength();
         String shortLink = RandomStringUtils.randomAlphanumeric(baseShortLinkLength);
-        LinkInfo linkInfo = LinkInfoUtils.random()
+        LinkInfo expectedEntity = LinkInfoUtils.random()
                 .shortLink(shortLink)
-                .build();
-
-        LinkInfoResponse expectedResponse = LinkInfoResponse.builder()
-                .id(linkInfo.getId())
-                .shortLink(linkInfo.getShortLink())
-                .openingCount(linkInfo.getOpeningCount())
-                .link(linkInfo.getLink())
-                .endTime(linkInfo.getEndTime())
-                .description(linkInfo.getDescription())
-                .isActive(linkInfo.getIsActive())
                 .build();
 
         //when
         when(linkInfoRepositoryImpl.findByShortLink(shortLink))
-                .thenReturn(Optional.of(linkInfo));
-        LinkInfoResponse actualResponse = linkService.getByShortLink(shortLink);
+                .thenReturn(Optional.of(expectedEntity));
+        LinkInfo actualEntity = linkService.getByShortLink(shortLink);
 
         //then
-        assertEquals(expectedResponse, actualResponse);
+        assertEquals(expectedEntity, actualEntity);
     }
 
     @Test
-    void whenFindByFilter_thenReturnAllEntities() {
+    @DisplayName("Корректный вызов метода LinkServiceImpl#getLinkByShortLink()")
+    void whenGetLinkByShortLink_thenReturnAllEntities() {
         //given
-        List<LinkInfo> links = new ArrayList<>() {{
-            add(LinkInfoUtils.random().build());
-            add(LinkInfoUtils.random().build());
-            add(LinkInfoUtils.random().build());
-        }};
-        GetAllLinkInfoResponse expectedResponse = new GetAllLinkInfoResponse(links);
+        LinkInfo entity = LinkInfoUtils.random().build();
 
         //when
-        when(linkInfoRepositoryImpl.findAll()).thenReturn(links);
-        GetAllLinkInfoResponse actualResponse = linkService.findByFilter();
+        when(linkInfoRepositoryImpl.findByShortLink(entity.getShortLink()))
+                .thenReturn(Optional.of(entity));
+        String link = linkService.getLinkByShortLink(entity.getShortLink());
 
         //then
-        assertEquals(expectedResponse.links().size(), actualResponse.links().size());
+        assertEquals(entity.getLink(), link);
+    }
+
+    @Test
+    @DisplayName("Корректный вызов метода LinkServiceImpl#getAllLinks()")
+    void whenGetAllLinks_thenReturnLink() {
+        //given
+        LinkInfo l1 = LinkInfo.builder().build();
+        LinkInfo l2 = LinkInfo.builder().build();
+        LinkInfo l3 = LinkInfo.builder().build();
+
+        List<LinkInfo> expected = List.of(l1, l2, l3);
+
+        //when
+        when(linkInfoRepositoryImpl.findAll())
+                .thenReturn(expected);
+        List<LinkInfo> actual = linkService.getAllLinks();
+
+        //then
+        assertEquals(actual.size(), expected.size());
     }
 
 }

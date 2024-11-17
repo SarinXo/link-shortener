@@ -1,20 +1,31 @@
 package ilya.service.linkshortener.service;
 
-import ilya.service.linkshortener.dto.GetAllLinkInfoResponse;
-import ilya.service.linkshortener.dto.LinkInfoRequest;
-import ilya.service.linkshortener.dto.LinkInfoResponse;
-import ilya.service.linkshortener.dto.UpdateLinkInfoRequest;
+import ilya.service.linkshortener.dto.service.LinkInfoCreateDto;
+import ilya.service.linkshortener.dto.service.LinkInfoUpdateDto;
+import ilya.service.linkshortener.model.LinkInfo;
+import org.springframework.lang.NonNull;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface LinkService {
-    LinkInfoResponse createLinkInfo(LinkInfoRequest requestDto);
+    @NonNull
+    LinkInfo create(LinkInfoCreateDto dto);
 
-    LinkInfoResponse getByShortLink(String shortLink);
-
-    GetAllLinkInfoResponse findByFilter();
+    @NonNull
+    LinkInfo update(LinkInfoUpdateDto dto);
 
     void delete(UUID id);
 
-    LinkInfoResponse update(UpdateLinkInfoRequest request);
+    @NonNull
+    LinkInfo getById(UUID id);
+
+    @NonNull
+    LinkInfo getByShortLink(String shortLink);
+
+    @NonNull
+    String getLinkByShortLink(String shortLink);
+
+    @NonNull
+    List<LinkInfo> getAllLinks();
 }
