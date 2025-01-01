@@ -18,10 +18,11 @@ public class DefaultExceptionServiceImpl implements DefaultExceptionService {
     public ResponseEntity<DefaultEndpointExceptionMessage> handleDefault(Exception e, HttpServletRequest request) {
         String message = e.getMessage();
         String type = e.getClass().toString();
-        String path = request.getMethod() + " " + request.getServletPath();
+        String method = request.getMethod();
+        String path = request.getServletPath();
         LocalDateTime timestamp = LocalDateTime.now();
 
-        DefaultEndpointExceptionMessage body = new DefaultEndpointExceptionMessage(timestamp, type, path, message);
+        DefaultEndpointExceptionMessage body = new DefaultEndpointExceptionMessage(timestamp, type, method, path, message);
 
         return ResponseEntity
                 .status(INTERNAL_SERVER_ERROR)
