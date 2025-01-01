@@ -6,50 +6,21 @@ import ilya.service.linkshortener.dto.controller.response.LinkInfoResponse;
 import ilya.service.linkshortener.dto.service.LinkInfoCreateDto;
 import ilya.service.linkshortener.dto.service.LinkInfoUpdateDto;
 import ilya.service.linkshortener.model.LinkInfo;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingConstants;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 
-public class LinkInfoMapper {
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING,
+        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+public interface LinkInfoMapper {
 
+    LinkInfoResponse modelToResponse(LinkInfo entity);
 
-    public static LinkInfoResponse modelToResponse(LinkInfo linkInfo) {
-        return new LinkInfoResponse(
-                linkInfo.getId(),
-                linkInfo.getShortLink(),
-                linkInfo.getOpeningCount(),
-                linkInfo.getLink(),
-                linkInfo.getEndTime(),
-                linkInfo.getDescription(),
-                linkInfo.getIsActive()
-        );
-    }
+    @Mapping(target = "openingCount", constant = "0L")
+    LinkInfo createDtoToModel(LinkInfoCreateDto dto);
 
-    public static LinkInfo createDtoToModel(LinkInfoCreateDto dto) {
-        return new LinkInfo(
-                null,
-                null,
-                0L,
-                dto.link(),
-                dto.endTime(),
-                dto.description(),
-                dto.isActive()
-        );
-    }
+    LinkInfoCreateDto requestToCreateDto(LinkInfoRequest req);
 
-    public static LinkInfoCreateDto requestToCreateDto(LinkInfoRequest req) {
-        return new LinkInfoCreateDto(
-                req.link(),
-                req.endTime(),
-                req.description(),
-                req.isActive()
-        );
-    }
-
-    public static LinkInfoUpdateDto updateRequestToUpdateDto(UpdateLinkInfoRequest req) {
-        return new LinkInfoUpdateDto(
-                req.id(),
-                req.link(),
-                req.endTime(),
-                req.description(),
-                req.isActive()
-        );
-    }
+    LinkInfoUpdateDto updateRequestToUpdateDto(UpdateLinkInfoRequest req);
 }
