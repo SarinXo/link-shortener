@@ -1,5 +1,6 @@
 package ilya.service.linkshortener.controller.api.v1;
 
+import ilya.service.linkshortener.config.AppTestConfiguration;
 import ilya.service.linkshortener.dto.controller.response.GetAllLinkInfoResponse;
 import ilya.service.linkshortener.dto.controller.request.LinkInfoRequest;
 import ilya.service.linkshortener.dto.controller.response.LinkInfoResponse;
@@ -17,6 +18,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -33,7 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-
+@Import(AppTestConfiguration.class)
 @WebMvcTest(LinkController.class)
 class LinkControllerTest {
 
