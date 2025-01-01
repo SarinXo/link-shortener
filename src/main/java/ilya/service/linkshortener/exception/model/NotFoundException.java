@@ -1,4 +1,4 @@
-package ilya.service.linkshortener.exception;
+package ilya.service.linkshortener.exception.model;
 
 public class NotFoundException extends LinkShortenerException {
     public NotFoundException(String message) {
