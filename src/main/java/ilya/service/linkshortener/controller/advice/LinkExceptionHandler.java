@@ -2,7 +2,6 @@ package ilya.service.linkshortener.controller.advice;
 
 import ilya.service.linkshortener.dto.exception.ValidationExceptionMessage;
 import ilya.service.linkshortener.dto.wrapper.CommonResponse;
-import ilya.service.linkshortener.exception.NotFoundException;
 import ilya.service.linkshortener.service.exception.LinkExceptionService;
 import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;

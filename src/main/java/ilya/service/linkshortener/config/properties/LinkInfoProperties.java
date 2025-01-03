@@ -9,7 +9,7 @@ import org.springframework.validation.annotation.Validated;
 @ConfigurationProperties(prefix = "link-shortener")
 public record LinkInfoProperties(
         @NotNull(message = "short link length can't be null")
-        @Min(message = "short link length cannot be less than 8", value = 8)
+        @Min(message = "short link length cannot be less than 8" , value = 8)
         Integer shortLinkLength
 ) {
 }

@@ -8,7 +8,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.stereotype.Component;
-import org.springframework.web.util.ContentCachingRequestWrapper;
 import org.springframework.web.util.ContentCachingResponseWrapper;
 
 import java.io.IOException;
@@ -21,34 +20,6 @@ import java.util.stream.Collectors;
 @Slf4j
 @Component
 public class LogFilter extends HttpFilter {
-
-    @Override
-    protected void doFilter(
-            HttpServletRequest request,
-            HttpServletResponse response,
-            FilterChain chain
-    ) throws IOException, ServletException {
-        String requestId = request.getRequestId();
-        String method = request.getMethod();
-        String requestUri = request.getRequestURI() + formatQueryString(request);
-        String headers = inlineHeaders(request);
-
-        log.debug("Начало обработки запроса: {} метод: {} URI перехода: {} заголовки: {} ", requestId, method, requestUri, headers);
-
-        ContentCachingResponseWrapper responseWrapper = new ContentCachingResponseWrapper(response);
-        try {
-            super.doFilter(request, responseWrapper, chain);
-
-            int status = response.getStatus();
-            String responseBody = new String(responseWrapper.getContentAsByteArray(), responseWrapper.getCharacterEncoding());
-
-            log.debug("Ответ на запрос: {} метод: {} URI перехода: {} статус: {} Тело ответа: {}", requestId, method, requestUri, status, responseBody);
-
-        } finally {
-            responseWrapper.copyBodyToResponse();
-        }
-
-    }
 
     private static String formatQueryString(HttpServletRequest request) {
         return Optional
@@ -72,6 +43,34 @@ public class LogFilter extends HttpFilter {
                     return headerName + "=" + headerValue;
                 })
                 .collect(Collectors.joining(", "));
+    }
+
+    @Override
+    protected void doFilter(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            FilterChain chain
+    ) throws IOException, ServletException {
+        String requestId = request.getRequestId();
+        String method = request.getMethod();
+        String requestUri = request.getRequestURI() + formatQueryString(request);
+        String headers = inlineHeaders(request);
+
+        log.debug("Начало обработки запроса: {} метод: {} URI перехода: {} заголовки: {} " , requestId, method, requestUri, headers);
+
+        ContentCachingResponseWrapper responseWrapper = new ContentCachingResponseWrapper(response);
+        try {
+            super.doFilter(request, responseWrapper, chain);
+
+            int status = response.getStatus();
+            String responseBody = new String(responseWrapper.getContentAsByteArray(), responseWrapper.getCharacterEncoding());
+
+            log.debug("Ответ на запрос: {} метод: {} URI перехода: {} статус: {} Тело ответа: {}" , requestId, method, requestUri, status, responseBody);
+
+        } finally {
+            responseWrapper.copyBodyToResponse();
+        }
+
     }
 
 }

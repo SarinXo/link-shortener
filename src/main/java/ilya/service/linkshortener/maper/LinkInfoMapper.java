@@ -17,7 +17,7 @@ public interface LinkInfoMapper {
 
     LinkInfoResponse modelToResponse(LinkInfo entity);
 
-    @Mapping(target = "openingCount", constant = "0L")
+    @Mapping(target = "openingCount" , constant = "0L")
     LinkInfo createDtoToModel(LinkInfoCreateDto dto);
 
     LinkInfoCreateDto requestToCreateDto(LinkInfoRequest req);
