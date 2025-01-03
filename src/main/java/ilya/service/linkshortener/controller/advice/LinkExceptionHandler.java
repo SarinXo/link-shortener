@@ -1,13 +1,12 @@
-package ilya.service.linkshortener.exception.controller;
+package ilya.service.linkshortener.controller.advice;
 
-import ilya.service.linkshortener.exception.constant.AdvicePriority;
-import ilya.service.linkshortener.exception.dto.ValidationExceptionMessage;
-import ilya.service.linkshortener.exception.model.NotFoundException;
-import ilya.service.linkshortener.exception.service.LinkExceptionService;
+import ilya.service.linkshortener.dto.exception.ValidationExceptionMessage;
+import ilya.service.linkshortener.dto.wrapper.CommonResponse;
+import ilya.service.linkshortener.exception.NotFoundException;
+import ilya.service.linkshortener.service.exception.LinkExceptionService;
 import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.annotation.Order;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -20,31 +19,35 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.MediaType.TEXT_HTML;
 
 @Slf4j
-@Order(AdvicePriority.FIRST)
 @RestControllerAdvice
 @RequiredArgsConstructor
 public class LinkExceptionHandler {
 
     private final LinkExceptionService service;
+    private final String NOT_FOUND_PAGE;
 
-    @ExceptionHandler({NotFoundException.class, NoResourceFoundException.class})
+    @ExceptionHandler(NoResourceFoundException.class)
     public ResponseEntity<String> handleNotFoundException() {
         return ResponseEntity
                 .status(NOT_FOUND)
                 .contentType(TEXT_HTML)
-                .body(service.getNotFoundPage());
+                .body(NOT_FOUND_PAGE);
     }
 
     @ResponseStatus(BAD_REQUEST)
     @ExceptionHandler(ConstraintViolationException.class)
-    public ValidationExceptionMessage handleValidationException(ConstraintViolationException e) {
-        return service.handleValidationException(e);
+    public CommonResponse<ValidationExceptionMessage> handleValidationException(ConstraintViolationException e) {
+        ValidationExceptionMessage body = service.handleValidationException(e);
+
+        return CommonResponse.of(body);
     }
 
     @ResponseStatus(BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ValidationExceptionMessage handleBadInput(MethodArgumentNotValidException e) {
-        return service.handleBadInput(e);
+    public CommonResponse<ValidationExceptionMessage> handleBadInput(MethodArgumentNotValidException e) {
+        ValidationExceptionMessage body = service.handleBadInput(e);
+
+        return CommonResponse.of(body);
     }
 
 }

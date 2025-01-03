@@ -1,4 +1,4 @@
-package ilya.service.linkshortener.exception.dto;
+package ilya.service.linkshortener.dto.exception;
 
 import java.util.List;
 

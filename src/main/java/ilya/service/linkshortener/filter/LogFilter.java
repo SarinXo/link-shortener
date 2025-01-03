@@ -33,38 +33,20 @@ public class LogFilter extends HttpFilter {
         String requestUri = request.getRequestURI() + formatQueryString(request);
         String headers = inlineHeaders(request);
 
-        log.debug("""
-                      
-                  Начало обработки запроса: {}
-                  метод: {}
-                  URI перехода: {}
-                  заголовки: {}
-                  """, requestId, method, requestUri, headers);
+        log.debug("Начало обработки запроса: {} метод: {} URI перехода: {} заголовки: {} ", requestId, method, requestUri, headers);
 
-            ContentCachingRequestWrapper requestWrapper = new ContentCachingRequestWrapper(request);
-            ContentCachingResponseWrapper responseWrapper = new ContentCachingResponseWrapper(response);
-            try {
-                super.doFilter(requestWrapper, responseWrapper, chain);
+        ContentCachingResponseWrapper responseWrapper = new ContentCachingResponseWrapper(response);
+        try {
+            super.doFilter(request, responseWrapper, chain);
 
-                int status = response.getStatus();
-                String requestBody = new String(requestWrapper.getContentAsByteArray(), requestWrapper.getCharacterEncoding());
-                String responseBody = new String(responseWrapper.getContentAsByteArray(), responseWrapper.getCharacterEncoding());
+            int status = response.getStatus();
+            String responseBody = new String(responseWrapper.getContentAsByteArray(), responseWrapper.getCharacterEncoding());
 
-                log.debug("""
-                            
-                          Ответ на запрос: {}
-                          метод: {}
-                          URI перехода: {}
-                          статус: {}
-                          Тело запроса:
-                          {}
-                          Тело ответа:
-                          {}
-                          """, requestId, method, requestUri, status, requestBody, responseBody);
+            log.debug("Ответ на запрос: {} метод: {} URI перехода: {} статус: {} Тело ответа: {}", requestId, method, requestUri, status, responseBody);
 
-            } finally {
-                responseWrapper.copyBodyToResponse();
-            }
+        } finally {
+            responseWrapper.copyBodyToResponse();
+        }
 
     }
 
@@ -89,7 +71,7 @@ public class LogFilter extends HttpFilter {
 
                     return headerName + "=" + headerValue;
                 })
-                .collect(Collectors.joining("\n"));
+                .collect(Collectors.joining(", "));
     }
 
 }

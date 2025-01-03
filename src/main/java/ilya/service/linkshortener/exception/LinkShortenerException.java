@@ -1,4 +1,4 @@
-package ilya.service.linkshortener.exception.model;
+package ilya.service.linkshortener.exception;
 
 public class LinkShortenerException extends RuntimeException {
 

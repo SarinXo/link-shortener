@@ -3,7 +3,7 @@ package ilya.service.linkshortener.service.impl;
 import ilya.service.linkshortener.config.properties.LinkInfoProperties;
 import ilya.service.linkshortener.dto.service.LinkInfoCreateDto;
 import ilya.service.linkshortener.dto.service.LinkInfoUpdateDto;
-import ilya.service.linkshortener.exception.model.NotFoundException;
+import ilya.service.linkshortener.exception.NotFoundException;
 import ilya.service.linkshortener.maper.LinkInfoMapper;
 import ilya.service.linkshortener.model.LinkInfo;
 import ilya.service.linkshortener.repository.LinkInfoRepository;

@@ -1,11 +1,10 @@
-package ilya.service.linkshortener.exception.service;
+package ilya.service.linkshortener.service.exception;
 
-import ilya.service.linkshortener.exception.dto.ValidationExceptionMessage;
+import ilya.service.linkshortener.dto.exception.ValidationExceptionMessage;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
 public interface LinkExceptionService {
-    String getNotFoundPage();
 
     ValidationExceptionMessage handleValidationException(ConstraintViolationException e);
 

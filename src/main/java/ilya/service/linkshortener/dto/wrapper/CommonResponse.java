@@ -8,7 +8,7 @@ public record CommonResponse<T>(
 ) {
 
     public static <T> CommonResponse<T> of(T body) {
-        return new CommonResponse<>(null, body);
+        return new CommonResponse<>(UUID.randomUUID(), body);
     }
 
 }

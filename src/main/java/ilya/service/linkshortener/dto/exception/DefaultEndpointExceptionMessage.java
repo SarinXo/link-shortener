@@ -1,4 +1,4 @@
-package ilya.service.linkshortener.exception.dto;
+package ilya.service.linkshortener.dto.exception;
 
 
 import java.time.LocalDateTime;
@@ -6,8 +6,6 @@ import java.time.LocalDateTime;
 public record DefaultEndpointExceptionMessage(
         LocalDateTime timestamp,
         String message,
-        String method,
-        String path,
         String type
 ) {
 }

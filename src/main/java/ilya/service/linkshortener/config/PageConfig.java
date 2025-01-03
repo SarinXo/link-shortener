@@ -11,7 +11,7 @@ import java.nio.file.Path;
 @Configuration
 public class PageConfig {
 
-    @Bean
+    @Bean("NOT_FOUND_PAGE")
     public String notFoundPage() {
         try {
             ClassPathResource resource = new ClassPathResource("/templates/404.html");
