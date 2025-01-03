@@ -24,8 +24,13 @@ import java.util.UUID;
 public class LinkServiceImpl implements LinkService {
 
     private LinkInfoProperties linkInfoProperties;
-
+    private LinkInfoMapper mapper;
     private LinkInfoRepository linkInfoRepository;
+
+    @Autowired
+    public void setMapper(LinkInfoMapper linkInfoMapper) {
+        this.mapper = linkInfoMapper;
+    }
 
     @Autowired
     public void setLinkInfoProperties(LinkInfoProperties linkInfoProperties) {
@@ -39,7 +44,7 @@ public class LinkServiceImpl implements LinkService {
 
     @Override
     public LinkInfo create(LinkInfoCreateDto dto) {
-        LinkInfo linkInfo = LinkInfoMapper.createDtoToModel(dto);
+        LinkInfo linkInfo = mapper.createDtoToModel(dto);
 
         String shortLink = RandomStringUtils.randomAlphanumeric(linkInfoProperties.shortLinkLength());
         linkInfo.setShortLink(shortLink);

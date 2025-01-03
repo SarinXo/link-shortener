@@ -23,21 +23,22 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class LinkAdapterServiceImpl implements LinkAdapterService {
     private final LinkService linkService;
+    private final LinkInfoMapper mapper;
 
     @Override
     public CommonResponse<LinkInfoResponse> create(CommonRequest<LinkInfoRequest> request) {
-        LinkInfoCreateDto createDto = LinkInfoMapper.requestToCreateDto(request.body());
+        LinkInfoCreateDto createDto = mapper.requestToCreateDto(request.body());
         LinkInfo linkInfo = linkService.create(createDto);
-        LinkInfoResponse response = LinkInfoMapper.modelToResponse(linkInfo);
+        LinkInfoResponse response = mapper.modelToResponse(linkInfo);
 
         return CommonResponse.of(response);
     }
 
     @Override
     public CommonResponse<LinkInfoResponse> update(CommonRequest<UpdateLinkInfoRequest> request) {
-        LinkInfoUpdateDto updateDto = LinkInfoMapper.updateRequestToUpdateDto(request.body());
+        LinkInfoUpdateDto updateDto = mapper.updateRequestToUpdateDto(request.body());
         LinkInfo linkInfo = linkService.update(updateDto);
-        LinkInfoResponse response = LinkInfoMapper.modelToResponse(linkInfo);
+        LinkInfoResponse response = mapper.modelToResponse(linkInfo);
 
         return CommonResponse.of(response);
     }
@@ -45,7 +46,7 @@ public class LinkAdapterServiceImpl implements LinkAdapterService {
     @Override
     public CommonResponse<GetAllLinkInfoResponse> getByFilter() {
         GetAllLinkInfoResponse response = linkService.getAllLinks().stream()
-                .map(LinkInfoMapper::modelToResponse)
+                .map(mapper::modelToResponse)
                 .collect(Collectors.collectingAndThen(
                         Collectors.toList(),
                         GetAllLinkInfoResponse::new

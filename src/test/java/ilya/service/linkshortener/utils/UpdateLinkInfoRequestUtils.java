@@ -10,7 +10,7 @@ public class UpdateLinkInfoRequestUtils {
 
     public static UpdateLinkInfoRequest.UpdateLinkInfoRequestBuilder random() {
         return UpdateLinkInfoRequest.builder()
-                .id(UUID.randomUUID())
+                .id(UUID.randomUUID().toString())
                 .link(RandomStringUtils.randomAlphanumeric(10))
                 .endTime(LocalDateTime.now().plusDays(1))
                 .description(RandomStringUtils.randomAlphanumeric(10))
