@@ -3,7 +3,7 @@ package ilya.service.linkshortener.service.impl;
 import ilya.service.linkshortener.config.properties.LinkInfoProperties;
 import ilya.service.linkshortener.dto.service.LinkInfoCreateDto;
 import ilya.service.linkshortener.dto.service.LinkInfoUpdateDto;
-import ilya.service.linkshortener.model.LinkInfo;
+import ilya.service.linkshortener.model.LinkInfoEntity;
 import ilya.service.linkshortener.repository.LinkInfoRepository;
 import ilya.service.linkshortener.service.LinkService;
 import ilya.service.linkshortener.utils.LinkInfoCreateDtoUtils;
@@ -47,7 +47,7 @@ class LinkServiceImplTest {
         String shortLink = RandomStringUtils.randomAlphanumeric(baseShortLinkLength);
         Long openingCount = 0L;
 
-        LinkInfo linkInfo = new LinkInfo(
+        LinkInfoEntity linkInfo = new LinkInfoEntity(
                 UUID.randomUUID(),
                 shortLink,
                 openingCount,
@@ -60,7 +60,7 @@ class LinkServiceImplTest {
         //when
         when(linkInfoRepositoryImpl.save(any()))
                 .thenReturn(linkInfo);
-        LinkInfo entity = linkService.create(dto);
+        LinkInfoEntity entity = linkService.create(dto);
 
         //then
         int shortLinkLength = entity.getShortLink().length();
@@ -78,14 +78,14 @@ class LinkServiceImplTest {
     void whenUpdate_thenReturnCorrectEntity() {
         //given
         LinkInfoUpdateDto dto = LinkInfoUpdateDtoUtils.random().build();
-        LinkInfo entity = LinkInfoUtils.random().build();
+        LinkInfoEntity entity = LinkInfoUtils.random().build();
 
         //when
         when(linkInfoRepositoryImpl.findById(dto.id()))
                 .thenReturn(Optional.of(entity));
         when(linkInfoRepositoryImpl.save(entity))
                 .thenReturn(entity);
-        LinkInfo result = linkService.update(dto);
+        LinkInfoEntity result = linkService.update(dto);
 
         //then
         assertEquals(dto.link(), result.getLink());
@@ -99,12 +99,12 @@ class LinkServiceImplTest {
     void whenGetById_thenReturnCorrectEntity() {
         //given
         UUID id = UUID.randomUUID();
-        LinkInfo entity = LinkInfoUtils.random().id(id).build();
+        LinkInfoEntity entity = LinkInfoUtils.random().id(id).build();
 
         //when
         when(linkInfoRepositoryImpl.findById(id))
                 .thenReturn(Optional.of(entity));
-        LinkInfo result = linkService.getById(id);
+        LinkInfoEntity result = linkService.getById(id);
 
         //then
         assertEquals(entity, result);
@@ -116,14 +116,14 @@ class LinkServiceImplTest {
         //given
         int baseShortLinkLength = properties.shortLinkLength();
         String shortLink = RandomStringUtils.randomAlphanumeric(baseShortLinkLength);
-        LinkInfo expectedEntity = LinkInfoUtils.random()
+        LinkInfoEntity expectedEntity = LinkInfoUtils.random()
                 .shortLink(shortLink)
                 .build();
 
         //when
         when(linkInfoRepositoryImpl.findByShortLink(shortLink))
                 .thenReturn(Optional.of(expectedEntity));
-        LinkInfo actualEntity = linkService.getByShortLink(shortLink);
+        LinkInfoEntity actualEntity = linkService.getByShortLink(shortLink);
 
         //then
         assertEquals(expectedEntity, actualEntity);
@@ -133,7 +133,7 @@ class LinkServiceImplTest {
     @DisplayName("Корректный вызов метода LinkServiceImpl#getLinkByShortLink()")
     void whenGetLinkByShortLink_thenReturnAllEntities() {
         //given
-        LinkInfo entity = LinkInfoUtils.random().build();
+        LinkInfoEntity entity = LinkInfoUtils.random().build();
 
         //when
         when(linkInfoRepositoryImpl.findByShortLink(entity.getShortLink()))
@@ -148,16 +148,16 @@ class LinkServiceImplTest {
     @DisplayName("Корректный вызов метода LinkServiceImpl#getAllLinks()")
     void whenGetAllLinks_thenReturnLink() {
         //given
-        LinkInfo l1 = LinkInfo.builder().build();
-        LinkInfo l2 = LinkInfo.builder().build();
-        LinkInfo l3 = LinkInfo.builder().build();
+        LinkInfoEntity l1 = LinkInfoEntity.builder().build();
+        LinkInfoEntity l2 = LinkInfoEntity.builder().build();
+        LinkInfoEntity l3 = LinkInfoEntity.builder().build();
 
-        List<LinkInfo> expected = List.of(l1, l2, l3);
+        List<LinkInfoEntity> expected = List.of(l1, l2, l3);
 
         //when
         when(linkInfoRepositoryImpl.findAll())
                 .thenReturn(expected);
-        List<LinkInfo> actual = linkService.getAllLinks();
+        List<LinkInfoEntity> actual = linkService.getAllLinks();
 
         //then
         assertEquals(actual.size(), expected.size());

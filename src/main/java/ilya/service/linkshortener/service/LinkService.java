@@ -2,7 +2,7 @@ package ilya.service.linkshortener.service;
 
 import ilya.service.linkshortener.dto.service.LinkInfoCreateDto;
 import ilya.service.linkshortener.dto.service.LinkInfoUpdateDto;
-import ilya.service.linkshortener.model.LinkInfo;
+import ilya.service.linkshortener.model.LinkInfoEntity;
 import org.springframework.lang.NonNull;
 
 import java.util.List;
@@ -10,22 +10,22 @@ import java.util.UUID;
 
 public interface LinkService {
     @NonNull
-    LinkInfo create(LinkInfoCreateDto dto);
+    LinkInfoEntity create(LinkInfoCreateDto dto);
 
     @NonNull
-    LinkInfo update(LinkInfoUpdateDto dto);
+    LinkInfoEntity update(LinkInfoUpdateDto dto);
 
     void delete(UUID id);
 
     @NonNull
-    LinkInfo getById(UUID id);
+    LinkInfoEntity getById(UUID id);
 
     @NonNull
-    LinkInfo getByShortLink(String shortLink);
+    LinkInfoEntity getByShortLink(String shortLink);
 
     @NonNull
     String getLinkByShortLink(String shortLink);
 
     @NonNull
-    List<LinkInfo> getAllLinks();
+    List<LinkInfoEntity> getAllLinks();
 }

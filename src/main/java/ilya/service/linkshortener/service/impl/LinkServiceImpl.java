@@ -5,12 +5,13 @@ import ilya.service.linkshortener.dto.service.LinkInfoCreateDto;
 import ilya.service.linkshortener.dto.service.LinkInfoUpdateDto;
 import ilya.service.linkshortener.exception.NotFoundException;
 import ilya.service.linkshortener.maper.LinkInfoMapper;
-import ilya.service.linkshortener.model.LinkInfo;
+import ilya.service.linkshortener.model.LinkInfoEntity;
 import ilya.service.linkshortener.repository.LinkInfoRepository;
 import ilya.service.linkshortener.service.LinkService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -43,8 +44,9 @@ public class LinkServiceImpl implements LinkService {
     }
 
     @Override
-    public LinkInfo create(LinkInfoCreateDto dto) {
-        LinkInfo linkInfo = mapper.createDtoToModel(dto);
+    @NonNull
+    public LinkInfoEntity create(LinkInfoCreateDto dto) {
+        LinkInfoEntity linkInfo = mapper.createDtoToModel(dto);
 
         String shortLink = RandomStringUtils.randomAlphanumeric(linkInfoProperties.shortLinkLength());
         linkInfo.setShortLink(shortLink);
@@ -53,14 +55,51 @@ public class LinkServiceImpl implements LinkService {
     }
 
     @Override
-    public LinkInfo update(LinkInfoUpdateDto dto) {
-        LinkInfo linkInfo = getById(dto.id());
+    @NonNull
+    public LinkInfoEntity update(LinkInfoUpdateDto dto) {
+        LinkInfoEntity linkInfo = getById(dto.id());
         updateFromDto(linkInfo, dto);
 
         return linkInfoRepository.save(linkInfo);
     }
 
-    private LinkInfo updateFromDto(LinkInfo linkInfo, LinkInfoUpdateDto dto) {
+    @Override
+    public void delete(UUID id) {
+        linkInfoRepository.deleteById(id);
+    }
+
+    @Override
+    @NonNull
+    public LinkInfoEntity getById(UUID id) {
+        return linkInfoRepository.findById(id)
+                .orElseThrow(
+                        () -> new NotFoundException("LinkInfo with id = " + id + "not found")
+                );
+    }
+
+    @Override
+    @NonNull
+    public LinkInfoEntity getByShortLink(String shortLink) {
+        return linkInfoRepository.findByShortLink(shortLink)
+                .filter(this::isAvailableLink)
+                .orElseThrow(
+                        () -> new NotFoundException("LinkInfo with short link = '" + shortLink + "' doesn't exist")
+                );
+    }
+
+    @Override
+    @NonNull
+    public String getLinkByShortLink(String shortLink) {
+        return getByShortLink(shortLink).getLink();
+    }
+
+    @Override
+    @NonNull
+    public List<LinkInfoEntity> getAllLinks() {
+        return linkInfoRepository.findAll();
+    }
+
+    private LinkInfoEntity updateFromDto(LinkInfoEntity linkInfo, LinkInfoUpdateDto dto) {
         if (StringUtils.hasText(dto.link())) {
             linkInfo.setLink(dto.link());
         }
@@ -76,42 +115,10 @@ public class LinkServiceImpl implements LinkService {
         return linkInfo;
     }
 
-    @Override
-    public void delete(UUID id) {
-        linkInfoRepository.delete(id);
-    }
-
-    @Override
-    public LinkInfo getById(UUID id) {
-        return linkInfoRepository.findById(id)
-                .orElseThrow(
-                        () -> new NotFoundException("LinkInfo with id = " + id + "not found")
-                );
-    }
-
-    @Override
-    public LinkInfo getByShortLink(String shortLink) {
-        return linkInfoRepository.findByShortLink(shortLink)
-                .filter(this::isAvailableLink)
-                .orElseThrow(
-                        () -> new NotFoundException("LinkInfo with short link = '" + shortLink + "' doesn't exist")
-                );
-    }
-
-    private boolean isAvailableLink(LinkInfo linkInfo) {
+    private boolean isAvailableLink(LinkInfoEntity linkInfo) {
         boolean isActive = Boolean.TRUE.equals(linkInfo.getIsActive());
         boolean isNotExpired = LocalDateTime.now().isBefore(linkInfo.getEndTime());
 
         return isActive && isNotExpired;
-    }
-
-    @Override
-    public String getLinkByShortLink(String shortLink) {
-        return getByShortLink(shortLink).getLink();
-    }
-
-    @Override
-    public List<LinkInfo> getAllLinks() {
-        return linkInfoRepository.findAll();
     }
 }

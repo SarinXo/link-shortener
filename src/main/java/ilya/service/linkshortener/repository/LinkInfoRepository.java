@@ -1,22 +1,13 @@
 package ilya.service.linkshortener.repository;
 
-import ilya.service.linkshortener.model.LinkInfo;
-import org.springframework.lang.NonNull;
+import ilya.service.linkshortener.model.LinkInfoEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface LinkInfoRepository {
-    Optional<LinkInfo> findByShortLink(String shortLink);
+public interface LinkInfoRepository extends JpaRepository<LinkInfoEntity, UUID> {
 
-    LinkInfo save(LinkInfo linkInfo);
-
-    @NonNull
-    List<LinkInfo> findAll();
-
-    Optional<LinkInfo> findById(UUID id);
-
-    void delete(UUID id);
+    Optional<LinkInfoEntity> findByShortLink(String shortLink);
 
 }

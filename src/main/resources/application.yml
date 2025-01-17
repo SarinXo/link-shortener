@@ -5,3 +5,15 @@ spring:
     active:
       - local
       - log-exec-time
+  datasource:
+    url: ${link-shortener.datasource.url}
+    username: ${link-shortener.datasource.username}
+    password: ${link-shortener.datasource.password}
+    hikari:
+      schema: ${link-shortener.datasource.schema}
+      connection-init-sql: CREATE SCHEMA IF NOT EXISTS ${spring.datasource.hikari.schema};
+  liquibase:
+
+  jpa:
+    hibernate:
+      ddl-auto: validate

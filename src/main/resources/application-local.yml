@@ -7,3 +7,9 @@ logging:
 
 link-shortener:
   short-link-length: ${SHORT_LINK_LENGTH:10}
+  datasource:
+    database: link_shortener
+    schema: link_shortener
+    url: jdbc:postgresql://localhost:5454/${link-shortener.datasource.database}
+    username: test
+    password: pswd

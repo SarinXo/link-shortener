@@ -1,0 +1,10 @@
+databaseChangeLog:
+  - changeSet:
+      id: dev/0.0.1
+      author: SarinXo
+      changes:
+        - tagDatabase:
+            tag: dev/0.0.1
+  - include:
+      file: 001_create_link_info_table.yml
+      relativeToChangelogFile: true
