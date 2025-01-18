@@ -27,7 +27,7 @@ import java.util.UUID;
 @Table(name = LinkInfoEntity.TABLE_NAME)
 @NoArgsConstructor
 @AllArgsConstructor
-public class LinkInfoEntity {
+public class LinkInfoEntity extends AuditableEntity {
 
     public static final String TABLE_NAME = "link_info";
 
