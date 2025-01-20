@@ -7,7 +7,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.Negative;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -15,7 +14,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -32,7 +30,6 @@ public class LinkInfoEntity extends AuditableEntity {
     public static final String TABLE_NAME = "link_info";
 
     @Id
-    @NotNull
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     @NotEmpty
@@ -43,7 +40,6 @@ public class LinkInfoEntity extends AuditableEntity {
     private Long openingCount;
     @NotEmpty
     private String link;
-    @NotNull
     @Column(name = "end_time")
     private LocalDateTime endTime;
     @Nullable

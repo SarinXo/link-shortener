@@ -1,10 +1,12 @@
 package ilya.service.linkshortener.service.impl;
 
+import ilya.service.linkshortener.dto.controller.request.LinkInfoFilterRequest;
 import ilya.service.linkshortener.dto.controller.request.LinkInfoRequest;
-import ilya.service.linkshortener.dto.controller.request.UpdateLinkInfoRequest;
+import ilya.service.linkshortener.dto.controller.request.LinkInfoUpdateRequest;
 import ilya.service.linkshortener.dto.controller.response.GetAllLinkInfoResponse;
 import ilya.service.linkshortener.dto.controller.response.LinkInfoResponse;
 import ilya.service.linkshortener.dto.service.LinkInfoCreateDto;
+import ilya.service.linkshortener.dto.service.LinkInfoFilterDto;
 import ilya.service.linkshortener.dto.service.LinkInfoUpdateDto;
 import ilya.service.linkshortener.dto.wrapper.CommonRequest;
 import ilya.service.linkshortener.dto.wrapper.CommonResponse;
@@ -22,6 +24,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class LinkAdapterServiceImpl implements LinkAdapterService {
+
     private final LinkService linkService;
     private final LinkInfoMapper mapper;
 
@@ -35,7 +38,7 @@ public class LinkAdapterServiceImpl implements LinkAdapterService {
     }
 
     @Override
-    public CommonResponse<LinkInfoResponse> update(CommonRequest<UpdateLinkInfoRequest> request) {
+    public CommonResponse<LinkInfoResponse> update(CommonRequest<LinkInfoUpdateRequest> request) {
         LinkInfoUpdateDto updateDto = mapper.updateRequestToUpdateDto(request.body());
         LinkInfoEntity linkInfo = linkService.update(updateDto);
         LinkInfoResponse response = mapper.modelToResponse(linkInfo);
@@ -44,8 +47,9 @@ public class LinkAdapterServiceImpl implements LinkAdapterService {
     }
 
     @Override
-    public CommonResponse<GetAllLinkInfoResponse> getByFilter() {
-        GetAllLinkInfoResponse response = linkService.getAllLinks().stream()
+    public CommonResponse<GetAllLinkInfoResponse> getByFilter(CommonRequest<LinkInfoFilterRequest> request) {
+        LinkInfoFilterDto filterDto = mapper.filterRequestToFilterDto(request.body());
+        GetAllLinkInfoResponse response = linkService.getLinksByFilter(filterDto).stream()
                 .map(mapper::modelToResponse)
                 .collect(Collectors.collectingAndThen(
                         Collectors.toList(),

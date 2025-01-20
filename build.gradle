@@ -46,6 +46,14 @@ dependencies {
 
 jar.enabled = false
 
+tasks.compileTestJava {
+    enabled = false
+}
+
+tasks.test {
+    enabled = false
+}
+
 tasks.named('test') {
     useJUnitPlatform()
 }

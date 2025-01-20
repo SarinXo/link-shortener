@@ -7,5 +7,5 @@ public record DefaultEndpointExceptionMessage(
         LocalDateTime timestamp,
         String message,
         String type
-) {
+) implements ExceptionMessage {
 }

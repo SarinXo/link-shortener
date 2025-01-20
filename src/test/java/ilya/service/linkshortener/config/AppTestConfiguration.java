@@ -7,11 +7,12 @@ import ilya.service.linkshortener.service.exception.impl.LinkExceptionServiceImp
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.core.io.ResourceLoader;
 
 @TestConfiguration
 @RequiredArgsConstructor
 public class AppTestConfiguration {
+
+    private final DefaultExceptionService defaultExceptionService;
 
     @Bean
     public DefaultExceptionService defaultExceptionService() {
@@ -20,7 +21,7 @@ public class AppTestConfiguration {
 
     @Bean
     public LinkExceptionService linkExceptionService() {
-        return new LinkExceptionServiceImpl();
+        return new LinkExceptionServiceImpl(defaultExceptionService);
     }
 
 }

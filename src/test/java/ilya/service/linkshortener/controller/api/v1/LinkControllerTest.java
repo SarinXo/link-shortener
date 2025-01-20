@@ -1,10 +1,10 @@
 package ilya.service.linkshortener.controller.api.v1;
 
 import ilya.service.linkshortener.config.AppTestConfiguration;
+import ilya.service.linkshortener.dto.controller.request.LinkInfoUpdateRequest;
 import ilya.service.linkshortener.dto.controller.response.GetAllLinkInfoResponse;
 import ilya.service.linkshortener.dto.controller.request.LinkInfoRequest;
 import ilya.service.linkshortener.dto.controller.response.LinkInfoResponse;
-import ilya.service.linkshortener.dto.controller.request.UpdateLinkInfoRequest;
 import ilya.service.linkshortener.dto.wrapper.CommonRequest;
 import ilya.service.linkshortener.dto.wrapper.CommonResponse;
 import ilya.service.linkshortener.service.LinkAdapterService;
@@ -78,8 +78,8 @@ class LinkControllerTest {
     @DisplayName("Корректный вызов метода LinkController#updateLink()")
     void whenUpdateLink_thenReturnUpdatedLink() throws Exception {
         //given
-        UpdateLinkInfoRequest updateRequest = UpdateLinkInfoRequestUtils.random().build();
-        CommonRequest<UpdateLinkInfoRequest> request = CommonRequest.of(updateRequest);
+        LinkInfoUpdateRequest updateRequest = UpdateLinkInfoRequestUtils.random().build();
+        CommonRequest<LinkInfoUpdateRequest> request = CommonRequest.of(updateRequest);
         LinkInfoResponse linkInfoResponse = LinkInfoResponseUtils.random().build();
         CommonResponse<LinkInfoResponse> response = CommonResponse.of(linkInfoResponse);
 

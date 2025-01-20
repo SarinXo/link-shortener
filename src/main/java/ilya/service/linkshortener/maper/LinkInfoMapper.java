@@ -1,9 +1,11 @@
 package ilya.service.linkshortener.maper;
 
+import ilya.service.linkshortener.dto.controller.request.LinkInfoFilterRequest;
 import ilya.service.linkshortener.dto.controller.request.LinkInfoRequest;
-import ilya.service.linkshortener.dto.controller.request.UpdateLinkInfoRequest;
+import ilya.service.linkshortener.dto.controller.request.LinkInfoUpdateRequest;
 import ilya.service.linkshortener.dto.controller.response.LinkInfoResponse;
 import ilya.service.linkshortener.dto.service.LinkInfoCreateDto;
+import ilya.service.linkshortener.dto.service.LinkInfoFilterDto;
 import ilya.service.linkshortener.dto.service.LinkInfoUpdateDto;
 import ilya.service.linkshortener.model.LinkInfoEntity;
 import org.mapstruct.Mapper;
@@ -22,5 +24,7 @@ public interface LinkInfoMapper {
 
     LinkInfoCreateDto requestToCreateDto(LinkInfoRequest req);
 
-    LinkInfoUpdateDto updateRequestToUpdateDto(UpdateLinkInfoRequest req);
+    LinkInfoUpdateDto updateRequestToUpdateDto(LinkInfoUpdateRequest req);
+
+    LinkInfoFilterDto filterRequestToFilterDto(LinkInfoFilterRequest req);
 }

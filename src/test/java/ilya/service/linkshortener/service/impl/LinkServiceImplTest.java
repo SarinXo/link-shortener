@@ -121,7 +121,7 @@ class LinkServiceImplTest {
                 .build();
 
         //when
-        when(linkInfoRepositoryImpl.findByShortLink(shortLink))
+        when(linkInfoRepositoryImpl.findActiveLinkByShortLink(shortLink))
                 .thenReturn(Optional.of(expectedEntity));
         LinkInfoEntity actualEntity = linkService.getByShortLink(shortLink);
 
@@ -136,7 +136,7 @@ class LinkServiceImplTest {
         LinkInfoEntity entity = LinkInfoUtils.random().build();
 
         //when
-        when(linkInfoRepositoryImpl.findByShortLink(entity.getShortLink()))
+        when(linkInfoRepositoryImpl.findActiveLinkByShortLink(entity.getShortLink()))
                 .thenReturn(Optional.of(entity));
         String link = linkService.getLinkByShortLink(entity.getShortLink());
 
@@ -157,7 +157,7 @@ class LinkServiceImplTest {
         //when
         when(linkInfoRepositoryImpl.findAll())
                 .thenReturn(expected);
-        List<LinkInfoEntity> actual = linkService.getAllLinks();
+        List<LinkInfoEntity> actual = linkService.getLinksByFilter();
 
         //then
         assertEquals(actual.size(), expected.size());
