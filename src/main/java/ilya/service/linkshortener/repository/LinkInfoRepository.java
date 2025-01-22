@@ -1,6 +1,5 @@
 package ilya.service.linkshortener.repository;
 
-import ilya.service.linkshortener.dto.controller.request.LinkInfoRequest;
 import ilya.service.linkshortener.dto.service.LinkInfoFilterDto;
 import ilya.service.linkshortener.model.LinkInfoEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,14 +11,15 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface LinkInfoRepository extends JpaRepository<LinkInfoEntity, UUID> {
+public interface LinkInfoRepository extends JpaRepository<LinkInfoEntity, UUID>, LinkInfoFilterRepository {
 
-    @Query("""
-           FROM LinkInfoEntity
-           WHERE shortLink = :shortLink
-             AND isActive = true
-             AND (endTime IS NULL OR endTime >= :#{T(java.time.LocalDateTime).now()})
-           """)
+    @Query(value = """
+           SELECT *
+           FROM link_info
+           WHERE short_link = :shortLink
+             AND is_active = true
+             AND (end_time IS NULL OR link_info.end_time >= CURRENT_TIMESTAMP)
+           """, nativeQuery = true)
     Optional<LinkInfoEntity> findActiveLinkByShortLink(String shortLink);
 
     @Query("""
@@ -31,15 +31,4 @@ public interface LinkInfoRepository extends JpaRepository<LinkInfoEntity, UUID> 
     @Transactional
     void incrementOpeningCountByShortLink(String shortLink);
 
-    @Query(value = """
-           from LinkInfoEntity
-           """)
-    List<LinkInfoEntity> findByFilter(LinkInfoFilterDto filterDto);
-/*FROM LinkInfoEntity l
-           WHERE (:#{filterDto.linkPart()}        IS NULL OR LOWER(l.link)        LIKE LOWER(CONCAT('%', :#{#filterDto.linkPart()} '%')))
-             AND (:#{filterDto.descriptionPart()} IS NULL OR LOWER(l.description) LIKE LOWER(CONCAT('%', :#{filterDto.descriptionPart()} '%')))
-             AND (:#{filterDto.fromEndTime()}     IS NULL OR l.end_time >= :#{filterDto.fromEndTime()})
-             AND (:#{filterDto.toEndTime()}       IS NULL OR l.end_time <= :#{filterDto.toEndTime()})
-             AND (:#{filterDto.isActive()}        IS NULL OR l.is_active = :#{filterDto.isActive()})
-           )*/
 }
