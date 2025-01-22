@@ -20,7 +20,7 @@ import java.util.Objects;
 @Component
 @Slf4j
 @Profile("log-exec-time")
-@ConditionalOnProperty(name = "logging.log-time.enabled" , havingValue = "true")
+@ConditionalOnProperty(name = "logging.log-time.enabled", havingValue = "true")
 public class LogTimeBeanPostProcessor implements BeanPostProcessor {
 
     private final Map<String, BeanInfo> beansWithLogTimeAnnotation = new HashMap<>();
@@ -62,7 +62,7 @@ public class LogTimeBeanPostProcessor implements BeanPostProcessor {
                     throw e.getCause();
                 } finally {
                     long executionTime = System.currentTimeMillis() - start;
-                    log.info("Метод {} выполнился за {} ms" , getMethodName(method, annotation), executionTime);
+                    log.info("Метод {} выполнился за {} ms", getMethodName(method, annotation), executionTime);
                 }
             }
 

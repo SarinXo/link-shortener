@@ -5,7 +5,6 @@ import ilya.service.linkshortener.dto.service.LinkInfoFilterDto;
 import ilya.service.linkshortener.model.LinkInfoEntity;
 import ilya.service.linkshortener.model.LinkInfoEntity_;
 import ilya.service.linkshortener.repository.LinkInfoFilterRepository;
-import ilya.service.linkshortener.repository.LinkInfoRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -25,8 +24,10 @@ public class LinkInfoRepositoryImpl implements LinkInfoFilterRepository {
     private EntityManager entityManager;
 
     //todo приделать Slice к запросу
+
     /**
      * Данный запрос работает только с postgreSQL из-за функции ILIKE
+     *
      * @param filterDto dto с параметрами фильтрации
      * @return список фильтрованных entity
      */

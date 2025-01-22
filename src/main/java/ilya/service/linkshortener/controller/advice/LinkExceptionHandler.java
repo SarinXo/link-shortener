@@ -34,7 +34,10 @@ public class LinkExceptionHandler {
     public ResponseEntity<String> handleNotFoundException(NotFoundLinkException e) {
         log.warn(e.getMessage(), e);
 
-        return ResponseEntity.status(NOT_FOUND).contentType(TEXT_HTML).body(NOT_FOUND_PAGE);
+        return ResponseEntity
+                .status(NOT_FOUND)
+                .contentType(TEXT_HTML)
+                .body(NOT_FOUND_PAGE);
     }
 
     @ResponseStatus(BAD_REQUEST)
