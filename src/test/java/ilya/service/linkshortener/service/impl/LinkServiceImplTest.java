@@ -1,7 +1,10 @@
 package ilya.service.linkshortener.service.impl;
 
 import ilya.service.linkshortener.config.properties.LinkInfoProperties;
+import ilya.service.linkshortener.dto.controller.request.LinkInfoFilterRequest;
+import ilya.service.linkshortener.dto.controller.response.LinkInfoResponse;
 import ilya.service.linkshortener.dto.service.LinkInfoCreateDto;
+import ilya.service.linkshortener.dto.service.LinkInfoFilterDto;
 import ilya.service.linkshortener.dto.service.LinkInfoUpdateDto;
 import ilya.service.linkshortener.model.LinkInfoEntity;
 import ilya.service.linkshortener.repository.LinkInfoRepository;
@@ -10,14 +13,22 @@ import ilya.service.linkshortener.utils.LinkInfoCreateDtoUtils;
 import ilya.service.linkshortener.utils.LinkInfoUpdateDtoUtils;
 import ilya.service.linkshortener.utils.LinkInfoUtils;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.context.TestPropertySource;
+import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.images.PullPolicy;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -27,6 +38,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
+@Testcontainers
 @EnableConfigurationProperties(value = LinkInfoProperties.class)
 @TestPropertySource("classpath:application-test.yml")
 class LinkServiceImplTest {
@@ -37,6 +49,24 @@ class LinkServiceImplTest {
     private LinkInfoProperties properties;
     @MockBean
     private LinkInfoRepository linkInfoRepositoryImpl;
+
+    static PostgreSQLContainer<?> postgresContainer =
+            new PostgreSQLContainer<>("postgres:" + PostgreSQLContainer.DEFAULT_TAG)
+                    .withDatabaseName("test")
+                    .withUsername("test")
+                    .withPassword("test");
+
+    @AfterEach
+    public void clean() {
+        linkInfoRepositoryImpl.deleteAll();
+    }
+    @DynamicPropertySource
+    static void configureProperties(DynamicPropertyRegistry registry) {
+        postgresContainer.start();
+        registry.add("spring.datasource.url", postgresContainer::getJdbcUrl);
+        registry.add("spring.datasource.username", postgresContainer::getUsername);
+        registry.add("spring.datasource.password", postgresContainer::getPassword);
+    }
 
     @Test
     @DisplayName("Корректный вызов метода LinkServiceImpl#create()")
@@ -148,19 +178,55 @@ class LinkServiceImplTest {
     @DisplayName("Корректный вызов метода LinkServiceImpl#getAllLinks()")
     void whenGetAllLinks_thenReturnLink() {
         //given
-        LinkInfoEntity l1 = LinkInfoEntity.builder().build();
-        LinkInfoEntity l2 = LinkInfoEntity.builder().build();
-        LinkInfoEntity l3 = LinkInfoEntity.builder().build();
+        LinkInfoEntity responseDto = LinkInfoEntity.builder()
+                .shortLink("1test")
+                .description("1testDescription")
+                .endTime(LocalDateTime.of(2000, 2, 2, 2, 2))
+                .isActive(true)
+                .build();
+        LinkInfoEntity dto1 = LinkInfoEntity.builder()
+                .shortLink("anotherLink")
+                .description("1testDescription")
+                .endTime(LocalDateTime.of(2000, 2, 2, 2, 2))
+                .isActive(true)
+                .build();
+        LinkInfoEntity dto2 = LinkInfoEntity.builder()
+                .shortLink("1test")
+                .description("anotherDescription")
+                .endTime(LocalDateTime.of(2000, 2, 2, 2, 2))
+                .isActive(true)
+                .build();
+        LinkInfoEntity dto3 = LinkInfoEntity.builder()
+                .shortLink("1test")
+                .description("1testDescription")
+                .endTime(LocalDateTime.of(2024, 6, 7, 8, 10))
+                .isActive(true)
+                .build();
+        LinkInfoEntity dto4 = LinkInfoEntity.builder()
+                .shortLink("1test")
+                .description("1testDescription")
+                .endTime(LocalDateTime.of(2000, 2, 2, 2, 2))
+                .isActive(false)
+                .build();
 
-        List<LinkInfoEntity> expected = List.of(l1, l2, l3);
+        linkInfoRepositoryImpl.saveAll(List.of(responseDto, dto1, dto2, dto3, dto4));
+        List<LinkInfoEntity> expected = List.of(responseDto);
+
+        LinkInfoFilterDto linkInfoFilterDto = LinkInfoFilterDto.builder()
+                .linkPart("test")
+                .descriptionPart("testDescription")
+                .fromEndTime(LocalDateTime.of(2000, 2, 2, 2, 1))
+                .toEndTime(LocalDateTime.of(2000, 2, 2, 2, 3))
+                .isActive(true)
+                .build();
 
         //when
-        when(linkInfoRepositoryImpl.findAll())
+        when(linkInfoRepositoryImpl.findByFilter(linkInfoFilterDto))
                 .thenReturn(expected);
-        List<LinkInfoEntity> actual = linkService.getLinksByFilter();
+        List<LinkInfoEntity> actual = linkService.getLinksByFilter(linkInfoFilterDto);
 
         //then
-        assertEquals(actual.size(), expected.size());
+        assertEquals(expected.size(), actual.size());
     }
 
 }

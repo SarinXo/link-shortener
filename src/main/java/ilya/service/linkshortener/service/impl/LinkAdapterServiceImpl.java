@@ -3,7 +3,7 @@ package ilya.service.linkshortener.service.impl;
 import ilya.service.linkshortener.dto.controller.request.LinkInfoFilterRequest;
 import ilya.service.linkshortener.dto.controller.request.LinkInfoRequest;
 import ilya.service.linkshortener.dto.controller.request.LinkInfoUpdateRequest;
-import ilya.service.linkshortener.dto.controller.response.GetAllLinkInfoResponse;
+import ilya.service.linkshortener.dto.controller.response.LinkInfoFilterResponse;
 import ilya.service.linkshortener.dto.controller.response.LinkInfoResponse;
 import ilya.service.linkshortener.dto.service.LinkInfoCreateDto;
 import ilya.service.linkshortener.dto.service.LinkInfoFilterDto;
@@ -47,13 +47,13 @@ public class LinkAdapterServiceImpl implements LinkAdapterService {
     }
 
     @Override
-    public CommonResponse<GetAllLinkInfoResponse> getByFilter(CommonRequest<LinkInfoFilterRequest> request) {
+    public CommonResponse<LinkInfoFilterResponse> getByFilter(CommonRequest<LinkInfoFilterRequest> request) {
         LinkInfoFilterDto filterDto = mapper.filterRequestToFilterDto(request.body());
-        GetAllLinkInfoResponse response = linkService.getLinksByFilter(filterDto).stream()
+        LinkInfoFilterResponse response = linkService.getLinksByFilter(filterDto).stream()
                 .map(mapper::modelToResponse)
                 .collect(Collectors.collectingAndThen(
                         Collectors.toList(),
-                        GetAllLinkInfoResponse::new
+                        LinkInfoFilterResponse::new
                 ));
 
         return CommonResponse.of(response);

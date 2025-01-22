@@ -3,7 +3,7 @@ package ilya.service.linkshortener.controller.api.v1;
 import ilya.service.linkshortener.dto.controller.request.LinkInfoFilterRequest;
 import ilya.service.linkshortener.dto.controller.request.LinkInfoRequest;
 import ilya.service.linkshortener.dto.controller.request.LinkInfoUpdateRequest;
-import ilya.service.linkshortener.dto.controller.response.GetAllLinkInfoResponse;
+import ilya.service.linkshortener.dto.controller.response.LinkInfoFilterResponse;
 import ilya.service.linkshortener.dto.controller.response.LinkInfoResponse;
 import ilya.service.linkshortener.dto.wrapper.CommonRequest;
 import ilya.service.linkshortener.dto.wrapper.CommonResponse;
@@ -55,7 +55,7 @@ public class LinkController {
     }
 
     @PostMapping("/filter")
-    public CommonResponse<GetAllLinkInfoResponse> getWithFilter(
+    public CommonResponse<LinkInfoFilterResponse> getWithFilter(
             @RequestBody @Valid CommonRequest<LinkInfoFilterRequest> request
     ) {
         return linkAdapterServiceImpl.getByFilter(request);

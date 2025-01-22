@@ -12,8 +12,6 @@ import org.springframework.context.annotation.Bean;
 @RequiredArgsConstructor
 public class AppTestConfiguration {
 
-    private final DefaultExceptionService defaultExceptionService;
-
     @Bean
     public DefaultExceptionService defaultExceptionService() {
         return new DefaultExceptionServiceImpl();
@@ -21,7 +19,12 @@ public class AppTestConfiguration {
 
     @Bean
     public LinkExceptionService linkExceptionService() {
-        return new LinkExceptionServiceImpl(defaultExceptionService);
+        return new LinkExceptionServiceImpl(defaultExceptionService());
+    }
+
+    @Bean("NOT_FOUND_PAGE")
+    public String notFoundPage() {
+        return "NOT_FOUND_PAGE";
     }
 
 }

@@ -6,7 +6,7 @@ import lombok.Builder;
 import java.util.List;
 
 @Builder
-public record GetAllLinkInfoResponse(
+public record LinkInfoFilterResponse(
         @NotNull List<LinkInfoResponse> links
 ) {
 }

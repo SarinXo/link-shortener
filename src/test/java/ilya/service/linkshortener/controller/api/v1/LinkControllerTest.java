@@ -1,15 +1,16 @@
 package ilya.service.linkshortener.controller.api.v1;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import ilya.service.linkshortener.config.AppTestConfiguration;
+import ilya.service.linkshortener.dto.controller.request.LinkInfoFilterRequest;
 import ilya.service.linkshortener.dto.controller.request.LinkInfoUpdateRequest;
-import ilya.service.linkshortener.dto.controller.response.GetAllLinkInfoResponse;
+import ilya.service.linkshortener.dto.controller.response.LinkInfoFilterResponse;
 import ilya.service.linkshortener.dto.controller.request.LinkInfoRequest;
 import ilya.service.linkshortener.dto.controller.response.LinkInfoResponse;
 import ilya.service.linkshortener.dto.wrapper.CommonRequest;
 import ilya.service.linkshortener.dto.wrapper.CommonResponse;
 import ilya.service.linkshortener.service.LinkAdapterService;
 import ilya.service.linkshortener.service.LinkService;
-import ilya.service.linkshortener.utils.GetAllLinkInfoResponseUtils;
 import ilya.service.linkshortener.utils.LinkInfoRequestUtils;
 import ilya.service.linkshortener.utils.LinkInfoResponseUtils;
 import ilya.service.linkshortener.utils.UpdateLinkInfoRequestUtils;
@@ -22,7 +23,9 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 import static ilya.service.linkshortener.utils.TestUtils.toJson;
 import static org.hamcrest.Matchers.hasSize;
@@ -41,6 +44,9 @@ class LinkControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @MockBean
     private LinkAdapterService linkAdapterService;
@@ -104,15 +110,36 @@ class LinkControllerTest {
     @Test
     @DisplayName("Корректный вызов метода LinkController#getWithFilter()")
     void whenGetWithFilter_thenReturn3Links() throws Exception {
-        GetAllLinkInfoResponse getAllLinkInfoResponse = GetAllLinkInfoResponseUtils.random(3).build();
-        CommonResponse<GetAllLinkInfoResponse> response = CommonResponse.of(getAllLinkInfoResponse);
+        //given
+        LinkInfoResponse responseDto = LinkInfoResponse.builder()
+                .shortLink("1test")
+                .description("1testDescription")
+                .endTime(LocalDateTime.of(2000, 2, 2, 2, 2))
+                .isActive(true)
+                .build();
 
-        when(linkAdapterService.getByFilter()).thenReturn(response);
+        LinkInfoFilterRequest linkInfoFilterRequest = LinkInfoFilterRequest.builder()
+                .linkPart("test")
+                .descriptionPart("testDescription")
+                .fromEndTime(LocalDateTime.of(2000, 2, 2, 2, 1))
+                .toEndTime(LocalDateTime.of(2000, 2, 2, 2, 3))
+                .isActive(true)
+                .build();
 
-        mockMvc.perform(get("/api/v1/link-infos/filter"))
+        CommonRequest<LinkInfoFilterRequest> request = CommonRequest.of(linkInfoFilterRequest);
+        CommonResponse<LinkInfoFilterResponse> response = CommonResponse.of(new LinkInfoFilterResponse(List.of(responseDto)));
+        //when
+        when(linkAdapterService.getByFilter(request)).thenReturn(response);
+        //then
+        mockMvc.perform(post("/api/v1/link-infos/filter")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsBytes(request)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.body.links").exists())
-                .andExpect(jsonPath("$.body.links", hasSize(3)));
+                .andExpect(jsonPath("$.body.links", hasSize(1)))
+                .andExpect(jsonPath("$.body.links[0].shortLink").value(responseDto.shortLink()))
+                .andExpect(jsonPath("$.body.links[0].description").value(responseDto.description()))
+                .andExpect(jsonPath("$.body.links[0].isActive").value(responseDto.isActive()));
     }
 }
