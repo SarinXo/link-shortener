@@ -1,8 +1,9 @@
 package ilya.service.linkshortener.controller.api.v1;
 
+import ilya.service.linkshortener.dto.controller.request.LinkInfoFilterRequest;
 import ilya.service.linkshortener.dto.controller.request.LinkInfoRequest;
-import ilya.service.linkshortener.dto.controller.request.UpdateLinkInfoRequest;
-import ilya.service.linkshortener.dto.controller.response.GetAllLinkInfoResponse;
+import ilya.service.linkshortener.dto.controller.request.LinkInfoUpdateRequest;
+import ilya.service.linkshortener.dto.controller.response.LinkInfoFilterResponse;
 import ilya.service.linkshortener.dto.controller.response.LinkInfoResponse;
 import ilya.service.linkshortener.dto.wrapper.CommonRequest;
 import ilya.service.linkshortener.dto.wrapper.CommonResponse;
@@ -12,7 +13,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -49,14 +49,16 @@ public class LinkController {
 
     @PutMapping
     public CommonResponse<LinkInfoResponse> updateLink(
-            @RequestBody @Valid CommonRequest<UpdateLinkInfoRequest> updateLinkInfoRequest
+            @RequestBody @Valid CommonRequest<LinkInfoUpdateRequest> updateLinkInfoRequest
     ) {
         return linkAdapterServiceImpl.update(updateLinkInfoRequest);
     }
 
-    @GetMapping("/filter")
-    public CommonResponse<GetAllLinkInfoResponse> getWithFilter() {
-        return linkAdapterServiceImpl.getByFilter();
+    @PostMapping("/filter")
+    public CommonResponse<LinkInfoFilterResponse> getWithFilter(
+            @RequestBody @Valid CommonRequest<LinkInfoFilterRequest> request
+    ) {
+        return linkAdapterServiceImpl.getByFilter(request);
     }
 
 }

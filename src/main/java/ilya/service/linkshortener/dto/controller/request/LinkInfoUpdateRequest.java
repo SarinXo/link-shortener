@@ -7,7 +7,7 @@ import lombok.Builder;
 import java.time.LocalDateTime;
 
 @Builder
-public record UpdateLinkInfoRequest(
+public record LinkInfoUpdateRequest(
         @NotNull
         @UuidString
         String id,

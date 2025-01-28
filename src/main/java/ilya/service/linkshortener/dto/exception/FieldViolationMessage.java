@@ -4,5 +4,5 @@ public record FieldViolationMessage(
         String field,
         String message,
         String invalidValue
-) {
+) implements ExceptionMessage {
 }

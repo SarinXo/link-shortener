@@ -1,0 +1,58 @@
+databaseChangeLog:
+  - changeSet:
+      id: "01_create_link_info_table.yml"
+      author: SarinXo
+      changes:
+        - createTable:
+            tableName: link_info
+            remarks: "Информационная таблица о ссылках и коротких ссылках"
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: short_link
+                  type: VARCHAR
+                  constraints:
+                    unique: true
+                  remarks: "Короткая ссылка"
+              - column:
+                  name: opening_count
+                  type: BIGINT
+                  remarks: "Количество открытий"
+              - column:
+                  name: link
+                  type: VARCHAR
+                  remarks: "Ссылка, на которую ведет короткая ссылка"
+              - column:
+                  name: end_time
+                  type: TIMESTAMP
+                  remarks: "Дата окончания действия короткой ссылки"
+              - column:
+                  name: description
+                  type: VARCHAR
+                  remarks: "Описание для короткой ссылки"
+              - column:
+                  name: is_active
+                  type: BOOL
+                  defaultValueBoolean: true
+                  remarks: "Флаг будет ли осуществляться переход по ссылке"
+              # аудируемые поля
+              - column:
+                  name: create_time
+                  type: TIMESTAMP
+                  remarks: "Дата создания объекта"
+              - column:
+                  name: last_update_time
+                  type: TIMESTAMP
+                  remarks: "Время последнего изменения"
+              - column:
+                  name: create_user
+                  type: varchar
+                  remarks: "Пользователь/сервис, который создал запись"
+              - column:
+                  name: last_update_user
+                  type: varchar
+                  remarks: "Пользователь/сервис, который обновил последним запись"

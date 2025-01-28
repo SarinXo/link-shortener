@@ -4,5 +4,5 @@ import java.util.List;
 
 public record ValidationExceptionMessage(
         List<FieldViolationMessage> violations
-) {
+) implements ExceptionMessage {
 }

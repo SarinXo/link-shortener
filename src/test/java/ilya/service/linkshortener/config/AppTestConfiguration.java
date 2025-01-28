@@ -7,7 +7,6 @@ import ilya.service.linkshortener.service.exception.impl.LinkExceptionServiceImp
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.core.io.ResourceLoader;
 
 @TestConfiguration
 @RequiredArgsConstructor
@@ -20,7 +19,12 @@ public class AppTestConfiguration {
 
     @Bean
     public LinkExceptionService linkExceptionService() {
-        return new LinkExceptionServiceImpl();
+        return new LinkExceptionServiceImpl(defaultExceptionService());
+    }
+
+    @Bean("NOT_FOUND_PAGE")
+    public String notFoundPage() {
+        return "NOT_FOUND_PAGE";
     }
 
 }

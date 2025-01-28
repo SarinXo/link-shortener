@@ -1,6 +1,12 @@
 package ilya.service.linkshortener.model;
 
 import jakarta.annotation.Nullable;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -12,26 +18,34 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Entity
 @Getter
 @Setter
 @Builder
+@Table(name = LinkInfoEntity.TABLE_NAME)
 @NoArgsConstructor
 @AllArgsConstructor
-public class LinkInfo {
+public class LinkInfoEntity extends AuditableEntity {
 
-    @NotNull
+    public static final String TABLE_NAME = "link_info";
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     @NotEmpty
+    @Column(name = "short_link")
     private String shortLink;
     @NotNull
+    @Column(name = "opening_count")
     private Long openingCount;
     @NotEmpty
     private String link;
-    @NotNull
+    @Column(name = "end_time")
     private LocalDateTime endTime;
     @Nullable
     private String description;
     @NotNull
+    @Column(name = "is_active")
     private Boolean isActive;
 
     @Override
@@ -39,7 +53,7 @@ public class LinkInfo {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        LinkInfo linkInfo = (LinkInfo) o;
+        LinkInfoEntity linkInfo = (LinkInfoEntity) o;
 
         return id.equals(linkInfo.id);
     }
