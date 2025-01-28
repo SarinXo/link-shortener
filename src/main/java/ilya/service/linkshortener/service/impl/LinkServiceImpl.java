@@ -13,6 +13,7 @@ import ilya.service.linkshortener.service.LinkService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -20,6 +21,15 @@ import org.springframework.util.StringUtils;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+
+import static ilya.service.linkshortener.model.LinkInfoEntity_.DESCRIPTION;
+import static ilya.service.linkshortener.model.LinkInfoEntity_.END_TIME;
+import static ilya.service.linkshortener.model.LinkInfoEntity_.IS_ACTIVE;
+import static ilya.service.linkshortener.model.LinkInfoEntity_.LINK;
+import static ilya.service.linkshortener.repository.specification.LinkInfoSpecificationFilter.afterOrEqualTime;
+import static ilya.service.linkshortener.repository.specification.LinkInfoSpecificationFilter.beforeOrEqualTime;
+import static ilya.service.linkshortener.repository.specification.LinkInfoSpecificationFilter.isEqual;
+import static ilya.service.linkshortener.repository.specification.LinkInfoSpecificationFilter.isFieldInclude;
 
 @Slf4j
 @Service
@@ -45,7 +55,6 @@ public class LinkServiceImpl implements LinkService {
     }
 
     @Override
-    @NonNull
     public LinkInfoEntity create(LinkInfoCreateDto dto) {
         LinkInfoEntity linkInfo = mapper.createDtoToModel(dto);
 
@@ -56,7 +65,6 @@ public class LinkServiceImpl implements LinkService {
     }
 
     @Override
-    @NonNull
     public LinkInfoEntity update(LinkInfoUpdateDto dto) {
         LinkInfoEntity linkInfo = getById(dto.id());
         updateFromDto(linkInfo, dto);
@@ -70,7 +78,6 @@ public class LinkServiceImpl implements LinkService {
     }
 
     @Override
-    @NonNull
     public LinkInfoEntity getById(UUID id) {
         return linkInfoRepository.findById(id)
                 .orElseThrow(
@@ -79,7 +86,6 @@ public class LinkServiceImpl implements LinkService {
     }
 
     @Override
-    @NonNull
     public LinkInfoEntity getByShortLink(String shortLink) {
         return linkInfoRepository
                 .findActiveLinkByShortLink(shortLink)
@@ -89,7 +95,6 @@ public class LinkServiceImpl implements LinkService {
     }
 
     @Override
-    @NonNull
     public String getLinkByShortLink(String shortLink) {
         LinkInfoEntity linkInfo = linkInfoRepository
                 .findActiveLinkByShortLink(shortLink)
@@ -101,10 +106,17 @@ public class LinkServiceImpl implements LinkService {
         return linkInfo.getLink();
     }
 
+    //todo приделать Slice к запросу
     @Override
-    @NonNull
     public List<LinkInfoEntity> getLinksByFilter(LinkInfoFilterDto filterDto) {
-        return linkInfoRepository.findByFilter(filterDto);
+        Specification<LinkInfoEntity> spec = Specification
+                .where(isFieldInclude(LINK, filterDto.linkPart()))
+                .and(isFieldInclude(DESCRIPTION, filterDto.descriptionPart()))
+                .and(afterOrEqualTime(END_TIME, filterDto.fromEndTime()))
+                .and(beforeOrEqualTime(END_TIME, filterDto.toEndTime()))
+                .and(isEqual(IS_ACTIVE, filterDto.isActive()));
+
+        return linkInfoRepository.findAll(spec);
     }
 
     private LinkInfoEntity updateFromDto(LinkInfoEntity linkInfo, LinkInfoUpdateDto dto) {

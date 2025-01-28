@@ -1,11 +1,11 @@
 databaseChangeLog:
   - changeSet:
-      id: "001_create_link_info_table.yml"
+      id: "01_create_link_info_table.yml"
       author: SarinXo
       changes:
         - createTable:
             tableName: link_info
-            remarks: "Создается таблица информации о коротких ссылках..."
+            remarks: "Информационная таблица о ссылках и коротких ссылках"
             columns:
               - column:
                   name: id

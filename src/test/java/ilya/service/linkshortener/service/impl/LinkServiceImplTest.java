@@ -1,8 +1,6 @@
 package ilya.service.linkshortener.service.impl;
 
 import ilya.service.linkshortener.config.properties.LinkInfoProperties;
-import ilya.service.linkshortener.dto.controller.request.LinkInfoFilterRequest;
-import ilya.service.linkshortener.dto.controller.response.LinkInfoResponse;
 import ilya.service.linkshortener.dto.service.LinkInfoCreateDto;
 import ilya.service.linkshortener.dto.service.LinkInfoFilterDto;
 import ilya.service.linkshortener.dto.service.LinkInfoUpdateDto;
@@ -13,19 +11,18 @@ import ilya.service.linkshortener.utils.LinkInfoCreateDtoUtils;
 import ilya.service.linkshortener.utils.LinkInfoUpdateDtoUtils;
 import ilya.service.linkshortener.utils.LinkInfoUtils;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.transaction.annotation.Transactional;
 import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.images.PullPolicy;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.time.LocalDateTime;
@@ -43,6 +40,11 @@ import static org.mockito.Mockito.when;
 @TestPropertySource("classpath:application-test.yml")
 class LinkServiceImplTest {
 
+    static PostgreSQLContainer<?> postgresContainer =
+            new PostgreSQLContainer<>("postgres:" + PostgreSQLContainer.DEFAULT_TAG)
+                    .withDatabaseName("test")
+                    .withUsername("test")
+                    .withPassword("test");
     @Autowired
     private LinkService linkService;
     @Autowired
@@ -50,16 +52,6 @@ class LinkServiceImplTest {
     @MockBean
     private LinkInfoRepository linkInfoRepositoryImpl;
 
-    static PostgreSQLContainer<?> postgresContainer =
-            new PostgreSQLContainer<>("postgres:" + PostgreSQLContainer.DEFAULT_TAG)
-                    .withDatabaseName("test")
-                    .withUsername("test")
-                    .withPassword("test");
-
-    @AfterEach
-    public void clean() {
-        linkInfoRepositoryImpl.deleteAll();
-    }
     @DynamicPropertySource
     static void configureProperties(DynamicPropertyRegistry registry) {
         postgresContainer.start();
@@ -175,6 +167,7 @@ class LinkServiceImplTest {
     }
 
     @Test
+    @Transactional
     @DisplayName("Корректный вызов метода LinkServiceImpl#getAllLinks()")
     void whenGetAllLinks_thenReturnLink() {
         //given
@@ -221,7 +214,7 @@ class LinkServiceImplTest {
                 .build();
 
         //when
-        when(linkInfoRepositoryImpl.findByFilter(linkInfoFilterDto))
+        when(linkInfoRepositoryImpl.findAll((Specification<LinkInfoEntity>) any()))
                 .thenReturn(expected);
         List<LinkInfoEntity> actual = linkService.getLinksByFilter(linkInfoFilterDto);
 

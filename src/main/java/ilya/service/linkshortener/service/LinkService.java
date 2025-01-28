@@ -11,23 +11,17 @@ import java.util.UUID;
 
 public interface LinkService {
 
-    @NonNull
     LinkInfoEntity create(LinkInfoCreateDto dto);
 
-    @NonNull
     LinkInfoEntity update(LinkInfoUpdateDto dto);
 
     void delete(UUID id);
 
-    @NonNull
     LinkInfoEntity getById(UUID id);
 
-    @NonNull
     LinkInfoEntity getByShortLink(String shortLink);
 
-    @NonNull
     String getLinkByShortLink(String shortLink);
 
-    @NonNull
     List<LinkInfoEntity> getLinksByFilter(LinkInfoFilterDto filterDto);
 }
