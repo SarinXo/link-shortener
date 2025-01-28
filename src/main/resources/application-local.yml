@@ -1,0 +1,27 @@
+logging:
+  level:
+    org:
+      hibernate:
+        orm:
+          jdbc:
+            bind: TRACE
+    ilya:
+      service: DEBUG
+  log-time:
+    enabled: true
+
+link-shortener:
+  short-link-length: ${SHORT_LINK_LENGTH:10}
+  datasource:
+    database: link_shortener
+    schema: link_shortener
+    url: jdbc:postgresql://localhost:5454/${link-shortener.datasource.database}
+    username: test
+    password: pswd
+
+spring:
+  jpa:
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
