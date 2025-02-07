@@ -13,6 +13,8 @@ import ilya.service.linkshortener.service.LinkService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
@@ -108,7 +110,7 @@ public class LinkServiceImpl implements LinkService {
 
     //todo приделать Slice к запросу
     @Override
-    public List<LinkInfoEntity> getLinksByFilter(LinkInfoFilterDto filterDto) {
+    public Slice<LinkInfoEntity> getLinksByFilter(LinkInfoFilterDto filterDto, Pageable pageable) {
         Specification<LinkInfoEntity> spec = Specification
                 .where(isFieldInclude(LINK, filterDto.linkPart()))
                 .and(isFieldInclude(DESCRIPTION, filterDto.descriptionPart()))
@@ -116,7 +118,7 @@ public class LinkServiceImpl implements LinkService {
                 .and(beforeOrEqualTime(END_TIME, filterDto.toEndTime()))
                 .and(isEqual(IS_ACTIVE, filterDto.isActive()));
 
-        return linkInfoRepository.findAll(spec);
+        return linkInfoRepository.findAllBy(spec, pageable);
     }
 
     private LinkInfoEntity updateFromDto(LinkInfoEntity linkInfo, LinkInfoUpdateDto dto) {

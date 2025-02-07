@@ -1,6 +1,11 @@
 package ilya.service.linkshortener.repository;
 
 import ilya.service.linkshortener.model.LinkInfoEntity;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
@@ -10,7 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface LinkInfoRepository extends JpaRepository<LinkInfoEntity, UUID>, JpaSpecificationExecutor<LinkInfoEntity> {
+public interface LinkInfoRepository extends JpaRepository<LinkInfoEntity, UUID>,
+                                            JpaSpecificationExecutor<LinkInfoEntity>,
+                                            LinkInfoSliceRepository {
 
     @Query(value = """
             SELECT *

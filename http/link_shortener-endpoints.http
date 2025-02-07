@@ -31,15 +31,15 @@ Content-Type: application/json
 GET http://localhost:8080/api/v1/short-link/qwe
 
 ###
-POST http://localhost:8080/api/v1/link-infos/filter
+POST http://localhost:8080/api/v1/link-infos/filter?size=5
 Content-Type: application/json
 
 {
   "body": {
     "linkPart": "go",
     "descriptionPart": null,
-    "fromEndTime": "2025-10-06T12:00:00",
-    "toEndTime": "2025-10-06T12:00:00",
+    "fromEndTime": null,
+    "toEndTime": null,
     "isActive": true
   }
 }

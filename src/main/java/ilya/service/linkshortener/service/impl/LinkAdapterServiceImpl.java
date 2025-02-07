@@ -16,6 +16,7 @@ import ilya.service.linkshortener.service.LinkAdapterService;
 import ilya.service.linkshortener.service.LinkService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.stream.Collectors;
@@ -47,9 +48,9 @@ public class LinkAdapterServiceImpl implements LinkAdapterService {
     }
 
     @Override
-    public CommonResponse<LinkInfoFilterResponse> getByFilter(CommonRequest<LinkInfoFilterRequest> request) {
+    public CommonResponse<LinkInfoFilterResponse> getByFilter(CommonRequest<LinkInfoFilterRequest> request, Pageable pageable) {
         LinkInfoFilterDto filterDto = mapper.filterRequestToFilterDto(request.body());
-        LinkInfoFilterResponse response = linkService.getLinksByFilter(filterDto).stream()
+        LinkInfoFilterResponse response = linkService.getLinksByFilter(filterDto, pageable).stream()
                 .map(mapper::modelToResponse)
                 .collect(Collectors.collectingAndThen(
                         Collectors.toList(),

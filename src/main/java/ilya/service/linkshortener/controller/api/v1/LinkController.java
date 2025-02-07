@@ -10,14 +10,18 @@ import ilya.service.linkshortener.dto.wrapper.CommonResponse;
 import ilya.service.linkshortener.service.LinkAdapterService;
 import ilya.service.linkshortener.service.LinkService;
 import jakarta.validation.Valid;
+import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -56,9 +60,10 @@ public class LinkController {
 
     @PostMapping("/filter")
     public CommonResponse<LinkInfoFilterResponse> getWithFilter(
+            @PageableDefault Pageable pageable,
             @RequestBody @Valid CommonRequest<LinkInfoFilterRequest> request
     ) {
-        return linkAdapterServiceImpl.getByFilter(request);
+        return linkAdapterServiceImpl.getByFilter(request, pageable);
     }
 
 }
